@@ -124,13 +124,14 @@ public class UserRepositoryTest {
 	@AfterAll
 	public static   void tearDown() {
 		if (staticEntityManager != null) {
-			staticEntityManager.getEntityManager().createQuery("DELETE FROM User").executeUpdate();
-
 	        // Hapus data dari tabel roles
 	        staticEntityManager.getEntityManager().createQuery("DELETE FROM Role").executeUpdate();
-
+	        
+	        // Panggil flush
+	        staticEntityManager.flush();
+	        
 	        // Atur ulang nilai auto-increment di tabel roles
 	        staticEntityManager.getEntityManager().createNativeQuery("ALTER TABLE roles AUTO_INCREMENT = 1").executeUpdate();
-        }
+	    }
 	}
 }
