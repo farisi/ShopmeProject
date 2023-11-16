@@ -13,6 +13,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table(name="users")
 public class User {
@@ -56,8 +57,6 @@ public class User {
 		this.roles = roles;
 	}
 	
-	
-
 	public User(String email, String password, String firstName, String lastName) {
 		super();
 		this.email = email;

@@ -4,14 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
@@ -34,12 +31,13 @@ public class UserRepositoryTest {
 	
 	private static TestEntityManager staticEntityManager;
 	
+
 	@BeforeEach
 	public void tearUp() {
 		List<Object[]> objects = ExcelDataReader.readTestDataFromExcel(getResourceFile("testroles.xlsx"), "Sheet1");
 		for(Object[] o : objects) {
 			Role role = new Role(o[0].toString(),o[1].toString(),o[2].toString());
-			entityManager.persistAndFlush(role);
+			entityManager.persist(role);
 		}
 	}
 	
@@ -57,10 +55,8 @@ public class UserRepositoryTest {
 	@Test
 	public void testCreateUser() {
 		Role admin = (Role) entityManager.getEntityManager().createQuery("SELECT r from Role r where name=?1").setParameter(1, "admin").getResultList().get(0);
-		System.out.println(" role id " + admin.getId());
 		User user1 = new User("ravi@codejava.net", "ravi2020", "Ravi", "Kumar");
-		Role roleAdmin = new Role(1);
-		user1.addRole(roleAdmin);
+		user1.addRole(admin);
 		User saveUser=repo.save(user1);
 		assertThat(saveUser).isNotNull();
 		
@@ -69,8 +65,8 @@ public class UserRepositoryTest {
 	@Test
 	public void testCreateNewUserWithTwoRoles() {
 		User rizal = new User("rizal.firdaus@gmail.com","captain2020","Rizal", "Firdaus");
-		Role roleEditor = new Role(4);
-		Role roleAssitant = new Role(5);
+		Role roleEditor = new Role(3);
+		Role roleAssitant = new Role(4);
 		rizal.addRole(roleAssitant);
 		rizal.addRole(roleEditor);
 		User saveUser = repo.save(rizal);
@@ -79,10 +75,18 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testAddRoleEditor() {
-		User rizal = repo.findById(9).get();
-		Role roleEditor = new Role(4);
-		rizal.addRole(roleEditor);
-		assertThat(rizal.getRoles().size()).isGreaterThan(1);
+		User wira = new User("wira.laoli@gmail.com","wira2020","Wira", "Lauli");
+		Role roleEditor = entityManager.find(Role.class, 3);
+		wira.addRole(roleEditor);
+		repo.save(wira);
+		
+		Integer idBaru = wira.getId();
+		Role roleAssintantFromDb = entityManager.find(Role.class, 4);
+		User wiraFromDatabase = repo.findById(idBaru).get();
+		wiraFromDatabase.addRole(roleAssintantFromDb);
+		wiraFromDatabase.getRoles().forEach(r->System.out.println(r.getName()));
+		assertThat(wiraFromDatabase.getRoles()).contains(roleAssintantFromDb);
+		assertThat(wiraFromDatabase.getRoles().size()).isEqualTo(2);
 	}
 	
 	@Test
@@ -93,12 +97,26 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testGetUserById() {
+		User wira = new User("wira.laoli@gmail.com","wira2020","Wira", "Lauli");
+		Role salesperson = new Role(2);
+		Role roleEditor = new Role(3);
+		wira.addRole(salesperson);
+		wira.addRole(roleEditor);
+		repo.save(wira);
+		
 		User userNam = repo.findById(1).get();
 		assertThat(userNam).isNotNull();
 	}
 	
 	@Test
 	public void testUpdateUserDetails() {
+		User wira = new User("wira.laoli@gmail.com","wira2020","Wira", "Lauli");
+		Role salesperson = new Role(2);
+		Role roleEditor = new Role(3);
+		wira.addRole(salesperson);
+		wira.addRole(roleEditor);
+		repo.save(wira);
+		
 		User userNam = repo.findById(1).get();
 		userNam.setEnabled(true);
 		User userNamUpdated = repo.save(userNam);
@@ -107,31 +125,48 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testUpdateUserRoles() {
-		User userRavi = repo.findById(9).get();
-		Role roleEditor = entityManager.find(Role.class, 4) ;
-		userRavi.getRoles().remove(roleEditor);
-		assertThat(userRavi.getRoles().size()).isLessThanOrEqualTo(1);
+		User wira = new User("wira.laoli@gmail.com","wira2020","Wira", "Lauli");
+		Role salesperson = entityManager.find(Role.class, 2);
+		Role roleEditor = entityManager.find(Role.class, 3);
+		wira.addRole(salesperson);
+		wira.addRole(roleEditor);
+		repo.save(wira);
+		
+		Integer idBaru = wira.getId();
+		Role roleEditor2 = entityManager.find(Role.class, 3) ;
+		User wiraFromDatabase = repo.findById(idBaru).get();		
+		wiraFromDatabase.getRoles().remove(roleEditor2);
+		assertThat(wiraFromDatabase.getRoles().size()).isLessThanOrEqualTo(1);
 	}
 	
 	
 	@Test
 	public void testRemoveUserById() {
-		Integer userId=3;
+		User wira = new User("wira.laoli@gmail.com","wira2020","Wira", "Lauli");
+		Role salesperson = new Role(2);
+		Role roleEditor = new Role(3);
+		wira.addRole(salesperson);
+		wira.addRole(roleEditor);
+		repo.save(wira);
+		
+		Integer userId=1;
 		repo.deleteById(userId);
 		assertThatNoException();
 	}
 	
-	@AfterAll
-	public static   void tearDown() {
-		if (staticEntityManager != null) {
-	        // Hapus data dari tabel roles
-	        staticEntityManager.getEntityManager().createQuery("DELETE FROM Role").executeUpdate();
-	        
-	        // Panggil flush
-	        staticEntityManager.flush();
-	        
-	        // Atur ulang nilai auto-increment di tabel roles
-	        staticEntityManager.getEntityManager().createNativeQuery("ALTER TABLE roles AUTO_INCREMENT = 1").executeUpdate();
-	    }
+	@AfterEach
+	public  void tearDown() {
+		entityManager.getEntityManager().createNativeQuery("DELETE from user_role").executeUpdate();
+		entityManager.getEntityManager().createNativeQuery("DELETE from Users").executeUpdate();
+		entityManager.getEntityManager().createNativeQuery("DELETE from Roles").executeUpdate();
+
+        
+        // Panggil flush
+		//entityManager.flush();
+		
+        
+        // Atur ulang nilai auto-increment di tabel roles
+		entityManager.getEntityManager().createNativeQuery("ALTER TABLE roles AUTO_INCREMENT = 1").executeUpdate();
+		entityManager.getEntityManager().createNativeQuery("ALTER TABLE users AUTO_INCREMENT = 1").executeUpdate();
 	}
 }

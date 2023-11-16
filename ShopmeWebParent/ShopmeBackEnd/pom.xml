@@ -14,13 +14,11 @@
 	<description>Shopme Admin Project</description>
 	
 	<properties>
-		<java.version>15</java.version>
+		<java.version>17</java.version>
 	</properties>
 	
 	<dependencies>
 
-
-	
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-devtools</artifactId>
@@ -42,17 +40,21 @@
         <artifactId>poi-ooxml</artifactId>
         <version>5.2.4</version> <!-- Ganti versi dengan versi terbaru -->
     </dependency>
-		
+   		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		
 		<dependency>
 			<groupId>com.shopme</groupId>
 			<artifactId>ShopmeCommon</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
+	
 	</dependencies>
 
 	<build>
