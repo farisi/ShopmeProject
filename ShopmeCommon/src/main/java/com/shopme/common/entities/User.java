@@ -57,6 +57,7 @@ public class User {
 		this.roles = roles;
 	}
 	
+	
 	public User(String email, String password, String firstName, String lastName) {
 		super();
 		this.email = email;
