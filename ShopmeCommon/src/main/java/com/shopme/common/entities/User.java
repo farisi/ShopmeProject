@@ -12,7 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-
+import uk.co.jemos.podam.common.PodamConstructor;
+import uk.co.jemos.podam.common.PodamExclude;
 
 @Entity
 @Table(name="users")
@@ -38,6 +39,7 @@ public class User {
 	
 	private boolean enabled;
 	
+	@PodamExclude
 	@ManyToMany
 	@JoinTable(name="user_role", joinColumns=@JoinColumn(name="user_id"),
 	inverseJoinColumns=@JoinColumn(name="role_id"))
@@ -57,7 +59,7 @@ public class User {
 		this.roles = roles;
 	}
 	
-	
+	@PodamConstructor
 	public User(String email, String password, String firstName, String lastName) {
 		super();
 		this.email = email;
