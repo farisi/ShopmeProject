@@ -11,8 +11,19 @@ public class ConfirmPasswordValidation implements ConstraintValidator<ConfirmPas
     public void initialize(final ConfirmPassword cp) {}
 
 	@Override
-	public boolean isValid(UserRequest value, ConstraintValidatorContext context) {
+	public boolean isValid(UserRequest user, ConstraintValidatorContext context) {
 		// TODO Auto-generated method stub
-	    return value.getPassword().equals(value.getConfirmPassword());
+		 boolean isValid = user.getPassword() != null && user.getPassword().equals(user.getConfirmPassword());
+		 System.out.println("sebelum test");
+		 if (!isValid) {
+			 System.out.println("sebelum penambahan ");
+	         context.disableDefaultConstraintViolation();
+			 System.out.println("getDefaultConstraintMessageTemplate " + context.getDefaultConstraintMessageTemplate());
+	         context.buildConstraintViolationWithTemplate("Password and confirm password must be matched!")
+	         .addPropertyNode("confirmPassword")
+	         .addConstraintViolation();
+	         System.out.println("Sesudah pemabahan violation");
+		 }
+	    return isValid;
 	}
 }
