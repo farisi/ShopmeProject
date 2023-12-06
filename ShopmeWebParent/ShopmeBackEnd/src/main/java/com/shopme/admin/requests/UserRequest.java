@@ -12,12 +12,12 @@ public class UserRequest {
 	
 	private String confirmPassword;
 	
-
 	@NotBlank(message = "password can not empty!!")
 	private String password;
 	
-	@NotBlank(message="Firstname can not empty!")
+	@NotBlank(message="Firstname can not blank!")
 	private String firstName;
+	
 	
 	private String lastName;
 	
