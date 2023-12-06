@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.requests.UserRequest;
 import com.shopme.admin.user.UserService;
@@ -40,8 +41,9 @@ public class UserController {
 	}
 	
 	@PostMapping("")
-	public String store(@ModelAttribute @Valid  UserRequest user, BindingResult valid,Model ui) {
+	public String store(@Valid  @ModelAttribute("user")  UserRequest user, BindingResult valid,Model ui,RedirectAttributes redirectAttributes) {
 		if(valid.hasErrors()) {
+			System.out.println(" tidak valid dengan error sebagai berikut : ");
 			for(FieldError e : valid.getFieldErrors()) {
 				System.out.println( " field " + e.getField() + " messages " + e.getDefaultMessage());
 			}
