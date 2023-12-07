@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
 	
-	@Autowired
+	@Autowired(required = true)
 	private UserService userSrv;
 
 	
@@ -36,20 +36,20 @@ public class UserController {
 	
 	@GetMapping("/create")
 	public String create(Model ui) {
-		ui.addAttribute("user",new UserRequest());
+		ui.addAttribute("user",new UserRequest());		
 		return "users/create";
 	}
 	
 	@PostMapping("")
 	public String store(@Valid  @ModelAttribute("user")  UserRequest user, BindingResult valid,Model ui,RedirectAttributes redirectAttributes) {
 		if(valid.hasErrors()) {
-			System.out.println(" tidak valid dengan error sebagai berikut : ");
 			for(FieldError e : valid.getFieldErrors()) {
 				System.out.println( " field " + e.getField() + " messages " + e.getDefaultMessage());
 			}
 			ui.addAttribute("user",user);
 			return "users/create";
 		}
+		userSrv.save(user);
 		return "redirect:/users";
 	}
 }
