@@ -1,12 +1,18 @@
 package com.shopme.admin.requests;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.shopme.admin.utilitas.validations.ConfirmPassword;
+import com.shopme.admin.utilitas.validations.EmailUnique;
+import com.shopme.common.entities.Role;
 
 import jakarta.validation.constraints.NotBlank;
 
 @ConfirmPassword(message="Password and confirm password must be matched!")
 public class UserRequest {
 
+	@EmailUnique
 	@NotBlank(message="Email can not empty!!")
 	private String email;
 	
@@ -16,10 +22,11 @@ public class UserRequest {
 	private String password;
 	
 	@NotBlank(message="Firstname can not blank!")
-	private String firstName;
-	
+	private String firstName;	
 	
 	private String lastName;
+	
+	private Set<Role> roles=new HashSet<>();
 	
 	public String getEmail() {
 		return email;
@@ -61,5 +68,15 @@ public class UserRequest {
 		this.confirmPassword = confirmPassword;
 	}
 	
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 	
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
 }
