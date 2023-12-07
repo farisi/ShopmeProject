@@ -16,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
+import com.shopme.admin.requests.UserRequest;
 import com.shopme.common.entities.Role;
 import com.shopme.common.entities.User;
 
@@ -46,21 +46,21 @@ public class UserServiceTest {
 	 
 
 	@Transactional
-	 @Test
-	 public void testSaveUser() {
+	@Test
+	public void testSaveUser() {
 		 Role role = podamFactory.manufacturePojo(Role.class);
 	        roleRepo.save(role);
 
-	        User userToSave = podamFactory.manufacturePojo(User.class);
+	        UserRequest userToSave = podamFactory.manufacturePojo(UserRequest.class);
 	        userToSave.addRole(role);
 
-	        userService.save(userToSave);
+	        User userAfterSaved = userService.save(userToSave);
 
-	        User retrievedUser = userService.findById(userToSave.getId());
+	        User retrievedUser = userService.findById(userAfterSaved.getId());
 	        assertNotNull(retrievedUser);
 	        assertEquals(userToSave.getEmail(), retrievedUser.getEmail());
 	        assertEquals(userToSave.getRoles().size(), retrievedUser.getRoles().size());
-	 }	
+	}	
 	
 	@Transactional
 	@Test
@@ -68,7 +68,7 @@ public class UserServiceTest {
 		Role role = podamFactory.manufacturePojo(Role.class);
 	    roleRepo.save(role);
 
-	    User userToSave = podamFactory.manufacturePojo(User.class);
+	    UserRequest userToSave = podamFactory.manufacturePojo(UserRequest.class);
 	    userToSave.addRole(role);
 
 	    usrSrvMock.save(userToSave);
@@ -78,12 +78,21 @@ public class UserServiceTest {
 	}
 	
 	 @Test
-	    public void testSaveUserFailure() {
+	 public void testSaveUserFailure() {
 	        // Arrange
-	        User userToSave = new User("john.doe@example.com", "password", "John", "Doe");
+		 //"john.doe@example.com", "password", "John", "Doe"
+		 UserRequest userToSave = new UserRequest();
+		 userToSave.setEmail("john.doe@example.com");
+		 userToSave.setFirstName("John");
+		 userToSave.setLastName("Doe");
+		 userToSave.setPassword("password");
+		 userToSave.setConfirmPassword("password");
 
-	        // Simulasikan kegagalan penyimpanan dengan always throwing exception
-	        doThrow(new RuntimeException("Simulated save failure")).when(usrSrvMock).save(any(User.class));
+	     // Simulasikan kegagalan penyimpanan dengan always throwing exception
+	     doThrow(new RuntimeException("Simulated save failure"))
+		     .when(usrSrvMock)
+		     .save(userToSave);
+		     //.save((UserRequest) any(UserRequest.class));
 
 	        // Act
 	        try {
@@ -95,5 +104,5 @@ public class UserServiceTest {
 	            assertEquals(0, ((List<User>) usrSrvMock.all()).size()); // Verifikasi bahwa user tidak berhasil disimpan
 	            assertEquals("Simulated save failure", e.getMessage()); // Verifikasi pesan exception yang dihasilkan
 	        }
-	    }
+	   }
 }
