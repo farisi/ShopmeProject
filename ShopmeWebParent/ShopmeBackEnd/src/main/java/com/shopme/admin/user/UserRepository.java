@@ -6,4 +6,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import com.shopme.common.entities.User;
 
 public interface UserRepository extends PagingAndSortingRepository<User,Integer>, ListCrudRepository<User, Integer> {
+	User findByEmail(String email);
 }
