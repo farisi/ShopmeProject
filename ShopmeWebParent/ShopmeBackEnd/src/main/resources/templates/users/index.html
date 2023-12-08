@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/app :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #home-static-resources},
+                                                 ~{:: #home-script-resouce},
+                                                ~{:: #home-header},
+                                                ~{:: #home-nav},
+                                                ~{:: #user-main-content},  
+                                                ~{:: #home-footer}
+                                               )}"
+>
 	<head>
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 		<title>Shopme Admin Control Panel</title>
 		<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+		<link th:href="@{/fontawesome/all.css}" rel="stylesheet" type="text/css" />
 	</head>
 	<body >
-		<div class="container-fluid">
-			
-		</div>
-		<main class="py-4">
+		<main class="py-4" id="user-main-content">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-lg-12">
@@ -23,14 +31,23 @@
 								<div class="card-content py-5">
 									<table class="table table-striped">
 									<thead>
-										<th>No</th><th>Email</th><th>Firstname</th><th>Lastname</th>
+										<th>No</th><th>Email</th><th>Firstname</th><th>Lastname</th><th>Role</th><th>Action</th>
 									</thead>
 									<tbody>
 										<tr th:each="u,index : ${users}">
-											<th th:text="${index.count}"></th>
-											<th th:text="${u.email}"></th>
-											<th th:text="${u.firstName}"></th>
-											<th th:text="${u.lastName}"></th>
+											<td th:text="${index.count}"></td>
+											<td th:text="${u.email}"></td>
+											<td th:text="${u.firstName}"></th>
+											<td th:text="${u.lastName}"></td>
+											<td>	
+												<th:block th:if="${not #lists.isEmpty(u.roles)}" th:text="${u.roles[0].displayName}"></th:block>	
+												<th:block th:if="${#lists.isEmpty(u.roles)}" >-</th:block>
+											</td>
+											<td>
+												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-edit  fa-xs"></i></a>
+												<a th:href="@{users/{id}/show(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-info  fa-xs"></i></a>
+												<a href="" class="btn btn-danger btn-sm"><i class="fas fa-remove  fa-xs"></i></a>
+											</td>
 										</tr>
 									</tbody>
 								</table>

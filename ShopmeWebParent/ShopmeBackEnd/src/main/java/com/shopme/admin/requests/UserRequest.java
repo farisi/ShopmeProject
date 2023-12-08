@@ -8,9 +8,13 @@ import com.shopme.admin.utilitas.validations.EmailUnique;
 import com.shopme.common.entities.Role;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @ConfirmPassword(message="Password and confirm password must be matched!")
 public class UserRequest {
+	
+	private Integer id;
 
 	@EmailUnique
 	@NotBlank(message="Email can not empty!!")
@@ -26,8 +30,17 @@ public class UserRequest {
 	
 	private String lastName;
 	
+	@NotEmpty
 	private Set<Role> roles=new HashSet<>();
-	
+		
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getEmail() {
 		return email;
 	}

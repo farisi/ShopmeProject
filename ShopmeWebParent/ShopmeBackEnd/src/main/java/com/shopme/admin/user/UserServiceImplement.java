@@ -1,6 +1,7 @@
 package com.shopme.admin.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ public class UserServiceImplement implements UserService {
 	
 	@Autowired(required = true)
 	UserRepository repo;
+	
+	@Autowired
+	RoleRepository roleRepo;
 
 	@Override
 	public List<User> all() {
@@ -21,21 +25,50 @@ public class UserServiceImplement implements UserService {
 	}
 
 	@Override
-	public User findById(Integer id) {
+	public UserRequest findById(Integer id) {
 		// TODO Auto-generated method stub
-		return repo.findById(id).get();
+		User u = repo.findById(id).get();
+		UserRequest userReq=new UserRequest();
+		userReq.setId(u.getId());
+		userReq.setEmail(u.getEmail());
+		userReq.setFirstName(u.getFirstName());
+		userReq.setLastName(u.getLastName());
+		userReq.setRoles(u.getRoles());
+		return userReq;
 	}
 
 	@Override
 	public User save(UserRequest userReq) {
 		// TODO Auto-generated method stub
-		User user = new User();
+		User user;
+		boolean isNew=false;
+		
+		if(userReq.getId() > 0) {
+			Optional<User> optUser = repo.findById(userReq.getId());
+			user = optUser.get();
+			if(!"".equals(user.getPassword())) {
+				user.setPassword(userReq.getPassword());
+			}
+		}
+		else {
+			user = new User();
+			user.setPassword(userReq.getPassword());
+			isNew=true;
+		}
+		user.setId(userReq.getId());
 		user.setEmail(userReq.getEmail());
 		user.setFirstName(userReq.getFirstName());
 		user.setLastName(userReq.getLastName());
-		user.setPassword(userReq.getPassword());
-	
-		return repo.save(user);
+
+		user.setRoles(userReq.getRoles());
+		
+		if(isNew) {
+			return repo.save(user);
+		}
+		else {
+			return user;
+		}
+
 	}
 
 	@Override
