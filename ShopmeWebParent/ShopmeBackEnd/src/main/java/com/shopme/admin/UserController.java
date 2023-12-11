@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -77,5 +78,12 @@ public class UserController {
 	@GetMapping("/{id}/show")
 	public String show() {
 		return "users/edit";
+	}
+	
+	@DeleteMapping("/{id}")
+	public String remove(@PathVariable Integer id) {
+		User user = userSrv.findUserById(id);
+		userSrv.remove(user);
+		return "redirect:/users";
 	}
 }

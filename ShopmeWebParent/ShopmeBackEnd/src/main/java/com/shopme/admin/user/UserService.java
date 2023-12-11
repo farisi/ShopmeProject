@@ -13,4 +13,5 @@ public interface UserService {
 	public User save(UserRequest usrReq);
 	public void remove(User user);
 	public boolean isEmailExist(String email);
+	public User findUserById(Integer id);
 }

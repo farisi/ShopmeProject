@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shopme.admin.requests.UserRequest;
 import com.shopme.common.entities.User;
@@ -17,11 +19,14 @@ public class UserServiceImplement implements UserService {
 	
 	@Autowired
 	RoleRepository roleRepo;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<User> all() {
 		// TODO Auto-generated method stub
-		return repo.findAll();
+		return repo.findUserAll();
 	}
 
 	@Override
@@ -36,21 +41,23 @@ public class UserServiceImplement implements UserService {
 		userReq.setRoles(u.getRoles());
 		return userReq;
 	}
-
+	@Transactional
 	@Override
 	public User save(UserRequest userReq) {
 		// TODO Auto-generated method stub
 		User user;
 		boolean isNew=false;
-		
+		String rawPassword=userReq.getPassword();
 		if(userReq.getId() > 0) {
 			Optional<User> optUser = repo.findById(userReq.getId());
 			user = optUser.get();
-			if(!"".equals(user.getPassword())) {
-				user.setPassword(userReq.getPassword());
+			if(!"".equals(userReq.getPassword())) {
+				
+				user.setPassword(passwordEncoder.encode(rawPassword));
 			}
 		}
 		else {
+			
 			user = new User();
 			user.setPassword(userReq.getPassword());
 			isNew=true;
@@ -62,12 +69,7 @@ public class UserServiceImplement implements UserService {
 
 		user.setRoles(userReq.getRoles());
 		
-		if(isNew) {
-			return repo.save(user);
-		}
-		else {
-			return user;
-		}
+		return repo.save(user);
 
 	}
 
@@ -80,7 +82,13 @@ public class UserServiceImplement implements UserService {
 	@Override
 	public boolean isEmailExist(String email) {
 		// TODO Auto-generated method stub
-		User user = repo.findByEmail(email);
+		User user = repo.findByEmail(email).get();
 		return user!=null;
+	}
+
+	@Override
+	public User findUserById(Integer id) {
+		// TODO Auto-generated method stub
+		return repo.findById(id).get();
 	}	
 }

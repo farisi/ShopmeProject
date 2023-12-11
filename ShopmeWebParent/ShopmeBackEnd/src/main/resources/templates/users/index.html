@@ -3,7 +3,7 @@
       th:replace="~{layouts/app :: main-fragment(  
                                                 ~{::title},
                                                 ~{:: #home-static-resources},
-                                                 ~{:: #home-script-resouce},
+                                                 ~{:: #user-script-resouce},
                                                 ~{:: #home-header},
                                                 ~{:: #home-nav},
                                                 ~{:: #user-main-content},  
@@ -46,7 +46,11 @@
 											<td>
 												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-edit  fa-xs"></i></a>
 												<a th:href="@{users/{id}/show(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-info  fa-xs"></i></a>
-												<a href="" class="btn btn-danger btn-sm"><i class="fas fa-remove  fa-xs"></i></a>
+												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-danger btn-sm btn-hapus" th:onclick="'event.preventDefault(); removeUser(this);'" th:data-id="${u.id}">
+												    <i class="fas fa-remove fa-xs"></i>
+												</a>
+												<form th:id="'user_'+${u.id}" th:action="@{/users/{userId}(userId=${u.id})}" th:method="delete" onsubmit="return confirmDelete()">
+												</form>
 											</td>
 										</tr>
 									</tbody>
@@ -58,7 +62,18 @@
 				</div>			
 			</div>
 		</main>		
-		<script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
-		<script type="text/javascript" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+		<th:block id="user-script-resouce">
+			<script th:inline="javascript">
+				function removeUser(e){
+					userid = e.getAttribute('data-id');
+					//document.getElementById("user_"+userid).submit();
+					$('#user_'+userid).submit();
+				
+				}
+			    function confirmDelete() {
+					return confirm('Are you sure want to delete this data?');
+			    }
+			</script>
+		</th:block>
 	</body>
 </html>
