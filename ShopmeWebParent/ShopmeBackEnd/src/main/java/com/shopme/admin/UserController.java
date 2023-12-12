@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.requests.UserRequest;
+import com.shopme.admin.user.EmailService;
 import com.shopme.admin.user.RoleService;
 import com.shopme.admin.user.UserService;
 import com.shopme.common.entities.User;
@@ -32,6 +33,9 @@ public class UserController {
 
 	@Autowired
 	private RoleService roleSrv;
+	
+	@Autowired
+	EmailService emailService;
 	
 	@GetMapping("")
 	public String index(Model ui) {
@@ -66,12 +70,18 @@ public class UserController {
 		UserRequest user = userSrv.findById(id);
 		ui.addAttribute("user",user);
 		ui.addAttribute("roles",roleSrv.all());
+		
 		return "/users/edit";
 	}
 	
 	@PatchMapping("/{id}")
 	public String update(@PathVariable Integer id, @ModelAttribute("user") UserRequest user) {
 		userSrv.save(user);
+		String to = user.getEmail();
+        String subject = "Test Email";
+        String body = "Hello, this is a test email from Spring Boot.";
+
+        emailService.sendEmail(to, subject, body);
 		return "redirect:/users";
 	}
 	

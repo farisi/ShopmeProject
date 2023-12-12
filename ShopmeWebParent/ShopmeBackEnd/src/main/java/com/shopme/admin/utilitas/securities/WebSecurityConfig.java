@@ -2,16 +2,13 @@ package com.shopme.admin.utilitas.securities;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -29,18 +26,24 @@ public class WebSecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES));
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((req) -> {
+                	req.requestMatchers(HttpMethod.GET, "/auth/reset_password")
+                		.permitAll();
+                	req.requestMatchers(HttpMethod.POST, "/auth/reset_password")
+                		.permitAll();
                     req.anyRequest()
-                            .authenticated();
+                        .authenticated();
                 })
-                
-                .logout((lg)->{
-                	lg.permitAll();
-                	lg.addLogoutHandler(clearSiteData);
-                })
-                .httpBasic(withDefaults());
+                .formLogin(login->login.loginPage("/login").permitAll())
+               .logout(logout -> {
+                   logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+                   logout.logoutSuccessUrl("/");
+                   logout.deleteCookies("JSESSIONID");
+                   logout.invalidateHttpSession(true);
+               });
+               //http.exceptionHandling((e)->e.accessDeniedPage("/403"));
+
 		return http.build();
 	}
 }
