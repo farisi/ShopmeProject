@@ -54,9 +54,6 @@ public class UserController {
 	@PostMapping("")
 	public String store(@Valid  @ModelAttribute("user")  UserRequest user, BindingResult valid,Model ui,RedirectAttributes redirectAttributes) {
 		if(valid.hasErrors()) {
-			for(FieldError e : valid.getFieldErrors()) {
-				System.out.println( " field " + e.getField() + " messages " + e.getDefaultMessage());
-			}
 			ui.addAttribute("user",user);
 			ui.addAttribute("roles", roleSrv.all());
 			return "users/create";
@@ -94,6 +91,11 @@ public class UserController {
 	public String remove(@PathVariable Integer id) {
 		User user = userSrv.findUserById(id);
 		userSrv.remove(user);
+		return "redirect:/users";
+	}
+	
+	@PatchMapping("/{id}/enabled")
+	public String user_enable(@PathVariable Integer id, @ModelAttribute("user") User user) {
 		return "redirect:/users";
 	}
 }

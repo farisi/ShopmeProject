@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.UserController;
 import com.shopme.admin.requests.UserRequest;
-
+import com.shopme.admin.user.RoleService;
 import com.shopme.admin.user.UserService;
 import com.shopme.common.entities.User;
 
@@ -37,6 +37,9 @@ public class UserControllerTest {
 	
 	@Mock
 	UserService userSrv;
+	
+	@Mock
+	RoleService roleSrv;
 
     @Test
     public void testStoreWithValidUser() {

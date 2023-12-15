@@ -9,10 +9,9 @@ import com.shopme.common.entities.Role;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @ConfirmPassword(message="Password and confirm password must be matched!")
-public class UserRequest {
+public class UserRequest implements ConfirmInterface {
 	
 	private Integer id;
 
@@ -48,7 +47,7 @@ public class UserRequest {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -72,7 +71,7 @@ public class UserRequest {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
+	@Override
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}

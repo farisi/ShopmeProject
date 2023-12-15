@@ -29,6 +29,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 				.stream()
 				.map(role->new SimpleGrantedAuthority("ROLE_" + role.getName()))
 				.collect(Collectors.toList());
+		if(user.isEnabled()) {
+			System.out.println("user sudah di enabled");
+		}
+		else {
+			System.out.println(" User belum di enabled ");
+		}
 		return new CustomUserDetail(user.getEmail(), user.getPassword(), user.isEnabled(), getAuthorities);
 	}
 

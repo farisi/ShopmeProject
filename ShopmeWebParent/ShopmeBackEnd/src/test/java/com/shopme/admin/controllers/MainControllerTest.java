@@ -25,7 +25,6 @@ public class MainControllerTest {
     public void testThymeleafTemplate() throws Exception {
         mockMvc
         .perform(get("/"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("index"));
+        .andExpect(status().isUnauthorized());
     }
 }

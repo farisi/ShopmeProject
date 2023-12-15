@@ -11,22 +11,33 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
 import com.shopme.admin.UserController;
 import com.shopme.admin.requests.UserRequest;
+import com.shopme.admin.user.EmailService;
 import com.shopme.admin.user.RoleService;
 import com.shopme.admin.user.UserService;
+import com.shopme.admin.utilitas.securities.CustomAuthenticationProvider;
 
 
 @WebMvcTest(UserController.class)
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
+@ExtendWith(value = {MockitoExtension.class,SpringExtension.class})
+//@ContextConfiguration
+@AutoConfigureMockMvc
 public class UserControllerSecondTest {
 	
 	@Autowired
-	private MockMvc mockMvc;
+	protected MockMvc mockMvc;
+	
+	@MockBean
+    private CustomAuthenticationProvider customAuthenticationProvider;
 	
 	@MockBean
 	UserService userSrv;
@@ -34,13 +45,20 @@ public class UserControllerSecondTest {
 	@MockBean
 	RoleService roleSrv;
 	
+	@MockBean
+	EmailService emailSrv;
+
+	
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
 	}
 	
+	
 	@Test
+	
     public void testStoreWithValidUser() throws Exception {
+
         // Persiapkan objek UserRequest yang valid
         UserRequest userRequest = new UserRequest();
         userRequest.setEmail("test@example.com");
@@ -50,8 +68,9 @@ public class UserControllerSecondTest {
         userRequest.setConfirmPassword("securePassword");
 
         // Lakukan pengujian dengan MockMvc
+       
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)      
                 .param("email", userRequest.getEmail())
                 .param("firstName", userRequest.getFirstName())
                 .param("lastName", userRequest.getLastName())

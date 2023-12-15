@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.shopme.common.entities.User;
 
@@ -18,4 +19,5 @@ public interface UserRepository extends PagingAndSortingRepository<User,Integer>
 	
 	@EntityGraph(attributePaths = "roles")
 	Optional<User> findByEmail(String email);
+	
 }

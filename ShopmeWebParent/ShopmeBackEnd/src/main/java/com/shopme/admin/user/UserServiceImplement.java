@@ -48,7 +48,7 @@ public class UserServiceImplement implements UserService {
 		User user;
 		boolean isNew=false;
 		String rawPassword=userReq.getPassword();
-		if(userReq.getId() > 0) {
+		if(userReq.getId()!=null) {
 			Optional<User> optUser = repo.findById(userReq.getId());
 			user = optUser.get();
 			if(!"".equals(userReq.getPassword())) {
@@ -59,7 +59,7 @@ public class UserServiceImplement implements UserService {
 		else {
 			
 			user = new User();
-			user.setPassword(userReq.getPassword());
+			user.setPassword(passwordEncoder.encode(userReq.getPassword()));
 			isNew=true;
 		}
 		user.setId(userReq.getId());
@@ -82,7 +82,11 @@ public class UserServiceImplement implements UserService {
 	@Override
 	public boolean isEmailExist(String email) {
 		// TODO Auto-generated method stub
-		User user = repo.findByEmail(email).get();
+		if("".equals(email))
+		{
+			return false;
+		}
+		User user = repo.findByEmail(email).orElse(null);
 		return user!=null;
 	}
 
@@ -90,5 +94,24 @@ public class UserServiceImplement implements UserService {
 	public User findUserById(Integer id) {
 		// TODO Auto-generated method stub
 		return repo.findById(id).get();
+	}
+
+	@Override
+	public Optional<User> findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return repo.findByEmail(email);
+	}
+
+	@Override
+	public User updateUserPassword(String password, User user) {
+		// TODO Auto-generated method stub
+		user.setPassword(passwordEncoder.encode(password));
+		return repo.save(user);
+	}
+
+	@Override
+	public User save(User user) {
+		// TODO Auto-generated method stub
+		return repo.save(user);
 	}	
 }

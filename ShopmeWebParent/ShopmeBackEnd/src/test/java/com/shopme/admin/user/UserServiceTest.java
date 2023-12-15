@@ -16,7 +16,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.shopme.admin.repositories.PasswordResetRepository;
 import com.shopme.admin.requests.UserRequest;
+import com.shopme.admin.utilitas.UrlUtils;
 import com.shopme.common.entities.User;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
@@ -40,6 +43,15 @@ public class UserServiceTest {
 	@MockBean
 	UserRepository usrRepo;
 	
+	@MockBean
+	PasswordResetRepository prRepo;
+	
+	@MockBean
+	EmailService emailSrv;
+	
+	@MockBean
+	UrlUtils urlSrv;
+	
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -51,7 +63,7 @@ public class UserServiceTest {
         List<User> userList = new ArrayList<>();
         userList.add(new User());
         userList.add(new User());
-        lenient().when(usrRepo.findAll()).thenReturn(userList);
+        lenient().when(usrRepo.findUserAll()).thenReturn(userList);
 
         // Calling the method to be tested
         List<User> result = userSrv.all();
