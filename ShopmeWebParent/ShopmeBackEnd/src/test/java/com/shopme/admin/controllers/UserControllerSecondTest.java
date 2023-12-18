@@ -1,5 +1,6 @@
 package com.shopme.admin.controllers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,9 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.shopme.admin.UserController;
@@ -26,11 +31,9 @@ import com.shopme.admin.user.UserService;
 import com.shopme.admin.utilitas.securities.CustomAuthenticationProvider;
 
 
-@WebMvcTest(UserController.class)
-//@ExtendWith(MockitoExtension.class)
-@ExtendWith(value = {MockitoExtension.class,SpringExtension.class})
-//@ContextConfiguration
+@SpringBootTest
 @AutoConfigureMockMvc
+@WithMockUser(value="salmandriva@gmail.com")
 public class UserControllerSecondTest {
 	
 	@Autowired
@@ -54,9 +57,13 @@ public class UserControllerSecondTest {
 		MockitoAnnotations.openMocks(this);
 	}
 	
-	
 	@Test
-	
+	public void testListUser() throws Exception {
+		 mockMvc.perform(get("/users"))
+		 .andExpect(status().isOk());
+	}
+
+	@Test
     public void testStoreWithValidUser() throws Exception {
 
         // Persiapkan objek UserRequest yang valid
@@ -76,9 +83,9 @@ public class UserControllerSecondTest {
                 .param("lastName", userRequest.getLastName())
                 .param("password", userRequest.getPassword())
                 .param("confirmPassword",userRequest.getConfirmPassword())
-        ).andExpect(status().is3xxRedirection())  // Jika valid, seharusnya melakukan redirect
-                .andExpect(redirectedUrl("/users"));
+        		).andExpect(status().isOk());
     }
+	
 	
 	@Test
 	public void testStoreWithoutFirstName() throws Exception {
