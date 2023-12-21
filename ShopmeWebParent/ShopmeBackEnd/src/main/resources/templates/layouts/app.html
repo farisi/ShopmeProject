@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
     th:fragment="main-fragment (title, otherStaticResources,otherScriptResources, header, nav, mainContent, footer)">
 <head>
 <meta charset="UTF-8" />
@@ -33,19 +35,76 @@
 		            <li><a class="dropdown-item" href="#" th:href="@{/users/create}">Create User</a></li>
 		          </ul>
 		        </li>
-		        <li class="nav-item">
-		          <a class="nav-link " th:href="@{/logout}" aria-disabled="true" onclick="event.preventDefault();$('#logout').submit()">Logout</a>
-		          <form th:method="POST" th:action="@{/logout}" id="logout"></form>
-		        </li>
+		        <li>
+					<span sec:authentication="name" class="nav-link">Test Authentication </span>
+				</li>
+		        
 		      </ul>
-		      <form class="d-flex" role="search">
+		      
+		      <form class=" ml-md-8 d-flex" role="search">
 		        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 		        <button class="btn btn-outline-success" type="submit">Search</button>
 		      </form>
+		      <div class="navbar-menu-wrapper d-flex align-items-top"> 
+	        <ul class="navbar-nav ms-auto">
+	          <li class="nav-item dropdown">
+	            <!--  <a class="nav-link count-indicator" id="notificationDropdown" href="#" data-bs-toggle="dropdown"> -->
+	            <a class="nav-link count-indicator" id="notificationDropdown" href="#" >
+	              <i class="icon-circle icon-lg"></i>
+	            </a>
+	            <!-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="notificationDropdown"> -->
+	            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" >
+	              <a class="dropdown-item py-3 border-bottom">
+	                <p class="mb-0 font-weight-medium float-left">You have 4 new notifications </p>
+	                <span class="badge badge-pill badge-primary float-right">View all</span>
+	              </a>
+	            </div>
+	          </li>
+	          <li class="nav-item dropdown"> 
+	            <!-- <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">  -->
+	            <a class="nav-link count-indicator" id="countDropdown" th:href="@{/settings}"  aria-expanded="false">
+	              <i class="icon-bell"></i>
+	              <span class="count"></span>
+	            </a>
+	            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
+	              <a class="dropdown-item py-3">
+	                <p class="mb-0 font-weight-medium float-left">You have 7 unread mails </p>
+	                <span class="badge badge-pill badge-primary float-right">View all</span>
+	              </a>
+	              <div class="dropdown-divider"></div>
+	              <a class="dropdown-item preview-item">
+	                <div class="preview-thumbnail">
+	                  <img src="../../images/faces/face10.jpg" alt="image" class="img-sm profile-pic" loading="lazy">
+	                </div>
+	                <div class="preview-item-content flex-grow py-2">
+	                  <p class="preview-subject ellipsis font-weight-medium text-dark">Marian Garner </p>
+	                  <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
+	                </div>
+	              </a>
+	              
+	            </div>
+	          </li>
+	          <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+	            <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+	              <img class="img-xs rounded-circle" src="../../images/faces/face8.jpg" alt="Profile image" loading="lazy"> </a>
+	            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+	              <div class="dropdown-header text-center">
+	                <img class="img-md rounded-circle" src="../../images/faces/face8.jpg" alt="Profile image" loading='lazy'>
+	                <p class="mb-1 mt-3 font-weight-semibold" sec:authentication="principal.fullname">test salman</p>
+	                <p class="fw-light text-muted mb-0" sec:authentication="principal.authorities">allenmoreno@gmail.com</p>
+	              </div>
+	              
+	              <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile <span class="badge badge-pill badge-danger">1</span></a>
+	              <a class="dropdown-item" th:href="@{/logout}"  onclick="event.preventDefault();$('#logout').submit()"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
+	              <form th:method="POST" th:action="@{/logout}" id="logout"></form>
+	            </div>
+	          </li>
+	        </ul>
+</div>
 		    </div>
 		  </div>
 		</nav>
-		<main th:insert="${mainContent} ?: ~{}"></main>
+		<main th:insert="${mainContent} ?: ~{}" class="px-5"></main>
 		<script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 

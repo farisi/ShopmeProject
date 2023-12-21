@@ -27,28 +27,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	@Resource
-	UserDetailsService usrDetail;
+//	@Resource
+//	UserDetailsService usrDetail;
 	
 	@Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+	
+	
+	@Bean
+	UserDetailsService myUserDetailsService() {
+		return new CustomUserDetailsService();
+	}
 
 	
 	@Bean
     DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(usrDetail);
+        authProvider.setUserDetailsService(myUserDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+	@Bean
+	public AuthenticationManager authenticationManager() {
+		return new ProviderManager(authProvider());
+	}
 	
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((req) -> {
-                	req.requestMatchers(HttpMethod.GET,"/register/create").permitAll();
+                	req.requestMatchers("/error/**").permitAll();
+                	req.requestMatchers(HttpMethod.GET,"/register").permitAll();
                 	req.requestMatchers(HttpMethod.POST,"/register").permitAll();
                 	req.requestMatchers(HttpMethod.GET, "/auth/reset_password*")
                 		.permitAll();

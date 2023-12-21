@@ -13,6 +13,12 @@ public class PasswordResetRequest implements ConfirmInterface {
 	private String email;
 	private UUID token;
 	
+	public PasswordResetRequest() {}
+	public PasswordResetRequest(UUID uuid, String email) {
+		setToken(uuid);
+		setEmail(email);
+	}
+	
 	@NotBlank(message = "password can not empty!")
 	private String password;
 	

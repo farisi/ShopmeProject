@@ -41,7 +41,7 @@ public class RegisterController {
 	DaoAuthenticationProvider authProvider;
 	
 		
-	@GetMapping("/create")
+	@GetMapping("")
 	public String create(Model ui) {
 		ui.addAttribute("user",new UserRequest());		
 		ui.addAttribute("roles", roleSrv.all());
@@ -57,7 +57,8 @@ public class RegisterController {
 		}
 		User changedUser = userSrv.save(user);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(changedUser.getEmail(), changedUser.getPassword());
-        //SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
         authProvider.authenticate(authentication);
         System.out.println(" register tersimpan!");
 		return "redirect:/";

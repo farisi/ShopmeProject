@@ -104,6 +104,7 @@ public class PasswordResetController {
 		User changedUser = usrSrv.updateUserPassword(prr.getPassword(), getUser.get());
 		System.out.println("user setelah diganti password " + changedUser.getEmail());
 		Authentication authentication = new UsernamePasswordAuthenticationToken(changedUser.getEmail(), changedUser.getPassword());
+		System.out.println(authentication);
         authProvider.authenticate(authentication);
         System.out.println("akan redirect");
 		return "redirect:/";

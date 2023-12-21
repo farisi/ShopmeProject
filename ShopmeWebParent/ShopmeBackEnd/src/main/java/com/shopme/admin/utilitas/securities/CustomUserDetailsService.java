@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.shopme.admin.user.UserRepository;
 import com.shopme.common.entities.User;
+
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -34,7 +36,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 		else {
 			System.out.println(" User belum di enabled ");
 		}
-		return new CustomUserDetail(user.getEmail(), user.getPassword(), user.isEnabled(), getAuthorities);
+		//return new CustomUserDetail(user.getEmail(), user.getPassword(), user.isEnabled(), getAuthorities);
+		MySecurityUser usrDetail = new MySecurityUser.Builder()
+				.withEmail(user.getEmail())
+				.withUsername(user.getEmail())
+				.withFullname(user.getFirstName() + " " +  user.getLastName())
+				.withPassword(user.getPassword())
+				.withAuthorities(getAuthorities)
+				.build();
+		return usrDetail;
 	}
 
 }

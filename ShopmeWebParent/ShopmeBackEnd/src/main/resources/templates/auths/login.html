@@ -1,9 +1,11 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/auth :: main-fragment(  
+<html lang="en" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+th:replace="~{layouts/auth :: main-fragment(  
                                                 ~{::title},
                                                 ~{:: #login-main-content}
                                                )}" >
 <head>
-<title>Form Reset Password</title>
+<title>Form Login</title>
 </head>
   <body>
      <div class="container" id="login-main-content">
