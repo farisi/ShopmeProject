@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/app :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #home-static-resources},
+                                                 ~{:: #home-script-resouce},
+                                                ~{:: #home-header},
+                                                ~{:: #home-nav},
+                                                ~{:: #user-main-content},  
+                                                ~{:: #home-footer}
+                                               )}"
+>
+<head>
+		
+		<title >Upload  User Image</title>
+
+	</head>
+	<body class="container-fluid">
+		<main class="py-4" id="user-main-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-body">								
+								<form th:action="@{/users}" th:object="${user}" th:method="post" enctype="multipart/form-data">
+									
+									<div class="form-group">
+										<label>Image Upload</label>
+										<input type="FILE" name="profile_foto" accept="image/*" class="form-control" />
+									</div>
+																		
+									<div class="form-group py-4">
+										<a class="btn btn-secondary" th:href="@{/users}">Cancel</a>
+										<button class="btn btn-primary">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</main>		
+		<script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+	</body>
+</html>

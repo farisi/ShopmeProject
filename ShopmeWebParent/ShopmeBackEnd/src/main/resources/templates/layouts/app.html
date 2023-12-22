@@ -9,6 +9,20 @@
 	<title th:replace="${title}">Page 1 Title</title>
 		<link th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
 		<link th:href="@{/fontawesome/all.css}" rel="stylesheet" type="text/css" />
+		<style>
+			.profile-image {
+			    width: 50px; /* Atur lebar sesuai kebutuhan */
+			    height: 50px; /* Atur tinggi sesuai kebutuhan */
+			    overflow: hidden; /* Untuk memastikan foto tidak keluar dari kotak */
+			    border-radius: 100%; /* Untuk membuat foto menjadi lingkaran (jika diinginkan) */
+			}
+			
+			.profile-image img {
+			    width: 100%; /* Agar gambar sesuai dengan lebar kotak */
+			    height: auto; /* Agar gambar tetap proporsional */
+			    display: block; /* Agar gambar tidak terpengaruh oleh ruang putih di sekitarnya */
+			}
+		</style>
 		<th:block th:replace="${otherStaticResources} ?: ~{}"></th:block>
 </head>
 	<body>
@@ -35,10 +49,6 @@
 		            <li><a class="dropdown-item" href="#" th:href="@{/users/create}">Create User</a></li>
 		          </ul>
 		        </li>
-		        <li>
-					<span sec:authentication="name" class="nav-link">Test Authentication </span>
-				</li>
-		        
 		      </ul>
 		      
 		      <form class=" ml-md-8 d-flex" role="search">
@@ -84,17 +94,16 @@
 	              
 	            </div>
 	          </li>
-	          <li class="nav-item dropdown d-none d-lg-block user-dropdown">
-	            <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-	              <img class="img-xs rounded-circle" src="../../images/faces/face8.jpg" alt="Profile image" loading="lazy"> </a>
+	          <li class="nav-item dropdown d-none d-lg-block user-dropdown dropstart">
+	            <a class="nav-link profile-image" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+	             	<img class="img-xs rounded-circle" th:src="@{'/images/avatars/'+${#authentication.principal.photo}}" alt="Profile image" loading="lazy"> 
+	            </a>
 	            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
 	              <div class="dropdown-header text-center">
-	                <img class="img-md rounded-circle" src="../../images/faces/face8.jpg" alt="Profile image" loading='lazy'>
-	                <p class="mb-1 mt-3 font-weight-semibold" sec:authentication="principal.fullname">test salman</p>
-	                <p class="fw-light text-muted mb-0" sec:authentication="principal.authorities">allenmoreno@gmail.com</p>
+	                <img class="img-md rounded-circle" th:src="@{'/images/avatars/'+${#authentication.principal.photo}}" alt="Profile image" loading='lazy'>
 	              </div>
-	              
-	              <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile <span class="badge badge-pill badge-danger">1</span></a>
+	              <p class="dropdown-item text-muted mb-0" sec:authentication="principal.authorities">allenmoreno@gmail.com</p>
+	              <a class="dropdown-item" th:href="@{/users/{id}(id=${#authentication.principal.id})}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2" ></i> My Profile <span class="badge badge-pill badge-danger" sec:authentication="principal.id">1</span></a>
 	              <a class="dropdown-item" th:href="@{/logout}"  onclick="event.preventDefault();$('#logout').submit()"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
 	              <form th:method="POST" th:action="@{/logout}" id="logout"></form>
 	            </div>

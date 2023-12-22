@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/app :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #home-static-resources},
+                                                 ~{:: #user-script-resouce},
+                                                ~{:: #home-header},
+                                                ~{:: #home-nav},
+                                                ~{:: #user-main-content},  
+                                                ~{:: #home-footer}
+                                               )}">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<title>User Profile</title>
+	<style id="home-static-resources">
+		.profile-card {
+			position: relative;
+			min-width: 0;
+			margin: 0 auto;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.profile-details {
+			text-align: center;
+		}
+
+		.profile-details p {
+			margin-bottom: 10px;
+		}
+		
+		.profile-image {
+		    width: 100px; /* Atur lebar sesuai kebutuhan */
+		    height: 100px; /* Atur tinggi sesuai kebutuhan */
+		    overflow: hidden; /* Untuk memastikan foto tidak keluar dari kotak */
+		    border-radius: 50%; /* Untuk membuat foto menjadi lingkaran (jika diinginkan) */
+		}
+		
+		.profile-image img {
+		    width: 100%; /* Agar gambar sesuai dengan lebar kotak */
+		    height: auto; /* Agar gambar tetap proporsional */
+		    display: block; /* Agar gambar tidak terpengaruh oleh ruang putih di sekitarnya */
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container mt-4" id="user-main-content">
+		<div class="card">
+			<div class="card-body">
+				<div class="profile-card">
+					<img th:src="@{'/images/avatars/'+${user.photos}}" alt="Profile Image">
+					<a th:href="@{/users/{id}/images(id=${user.id})}" class="btn btn-none"><i class="fas fa-edit"></i></a>
+				</div>
+
+				<div class="profile-details">
+					<p><strong th:text="${user.firstName + ' ' + user.lastName}">Nama Pengguna</strong></p>
+					<p th:text="${user.email}">EmailPengguna@example.com</p>
+					<p>Deskripsi pengguna singkat dapat ditambahkan di sini.</p>
+				</div>
+			</div>
+		</div>
+		<div class="profile-picture">
+			<img th:src="@{/images/avatars/8.jpg}" alt="Profile Picture" />
+		</div>
+	</div>
+</body>
+
+</html>

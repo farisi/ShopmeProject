@@ -38,10 +38,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		//return new CustomUserDetail(user.getEmail(), user.getPassword(), user.isEnabled(), getAuthorities);
 		MySecurityUser usrDetail = new MySecurityUser.Builder()
+				.withId(user.getId())
 				.withEmail(user.getEmail())
 				.withUsername(user.getEmail())
 				.withFullname(user.getFirstName() + " " +  user.getLastName())
 				.withPassword(user.getPassword())
+				.withPhoto(user.getPhotos())
 				.withAuthorities(getAuthorities)
 				.build();
 		return usrDetail;

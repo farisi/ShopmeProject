@@ -12,21 +12,31 @@ public class MySecurityUser extends User {
 
 	private String fullname;
 	private String email;
+	private Integer id;
+	private String photo;
 
 	private MySecurityUser(Builder builder) {
 		super(builder.username, builder.password, builder.authorities);
 		this.fullname=builder.fullname;
 		this.email=builder.email;
+		this.id=builder.id;
+		this.photo=builder.photo;
 	}
 
 	public String getFullname() {
         return fullname;
     }
 
-
-
     public String getEmail() {
         return email;
+    }
+    
+    public Integer getId() {
+    	return id;
+    }
+    
+    public String getPhoto() {
+    	return photo;
     }
 
     @Override
@@ -52,6 +62,8 @@ public class MySecurityUser extends User {
         private String email;
         private String username;
         private String password;
+        private Integer id;
+        private String photo;
 
         private Collection<? extends GrantedAuthority> authorities;
 
@@ -80,6 +92,16 @@ public class MySecurityUser extends User {
             this.authorities = authorities;
             return this;
         }
+        
+        public Builder withId(Integer id) {
+        	this.id= id;
+        	return this;
+        }
+        
+        public Builder withPhoto(String photo) {
+        	this.photo = photo;
+        	return this;
+        }
 
         public MySecurityUser build() {
             return new MySecurityUser(this);
@@ -89,7 +111,7 @@ public class MySecurityUser extends User {
 
 	@Override
 	public String toString() {
-		return "MySecurityUser  name=" + fullname + ", email=" + email + "] " + super.toString();
+		return "MySecurityUser  [id=" + id + ", name=" + fullname + ", email=" + email + "] " + super.toString();
 	}
 	
 	

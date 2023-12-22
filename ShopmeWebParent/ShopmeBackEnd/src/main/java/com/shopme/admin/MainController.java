@@ -9,6 +9,8 @@ public class MainController {
 	
 	@GetMapping("")
 	public String viewHomePage(Authentication authentication) {
+		String test=authentication.getPrincipal().toString();
+		System.out.println(" test : " + test);
 		return "index";
 	}
 }

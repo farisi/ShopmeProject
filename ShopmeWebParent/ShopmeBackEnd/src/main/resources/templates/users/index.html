@@ -47,8 +47,8 @@
 												<span th:text="${u.enabled ? 'Enable' : 'Disable'}" ></span>
 											</td>
 											<td>
-												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-edit  fa-xs"></i></a>
-												<a th:href="@{users/{id}/show(id=${u.id})}" class="btn btn-info btn-sm"><i class="fas fa-info  fa-xs"></i></a>
+												<a th:href="@{users/{id}/edit(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-edit  fa-xs"></i></a>
+												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-info btn-sm"><i class="fas fa-info  fa-xs"></i></a>
 												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-danger btn-sm btn-hapus" th:onclick="'event.preventDefault(); removeUser(this);'" th:data-id="${u.id}">
 												    <i class="fas fa-remove fa-xs"></i>
 												</a>

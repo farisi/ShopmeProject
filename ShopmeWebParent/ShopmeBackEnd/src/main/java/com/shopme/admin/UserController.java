@@ -63,6 +63,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
+	public String show(@PathVariable Integer id, Model ui) {
+		User user = userSrv.findUserById(id);
+		ui.addAttribute("user",user);
+		return "/users/profile";
+	}
+	
+	@GetMapping("/{id}/edit")
 	public String edit(@PathVariable Integer id, Model ui) {
 		UserRequest user = userSrv.findById(id);
 		ui.addAttribute("user",user);
@@ -80,11 +87,6 @@ public class UserController {
 
         emailService.sendEmail(to, subject, body);
 		return "redirect:/users";
-	}
-	
-	@GetMapping("/{id}/show")
-	public String show() {
-		return "users/edit";
 	}
 	
 	@DeleteMapping("/{id}")
