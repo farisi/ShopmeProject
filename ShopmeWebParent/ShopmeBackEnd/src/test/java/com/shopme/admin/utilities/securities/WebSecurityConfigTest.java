@@ -4,6 +4,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.ui.Model;
@@ -23,6 +31,8 @@ import com.shopme.admin.services.PasswordResetService;
 import com.shopme.admin.user.EmailService;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.utilitas.UrlUtils;
+import com.shopme.admin.utilitas.securities.CustomUserDetail;
+import com.shopme.admin.utilitas.securities.MySecurityUser;
 import com.shopme.admin.utilitas.securities.WebSecurityConfig;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -54,14 +64,30 @@ public class WebSecurityConfigTest {
     @MockBean
 	UserService usrSrv;
     
+    
     @MockBean
     Model ui;
     
     @Test
     public void testRootPath() throws Exception {
+    	 List<GrantedAuthority> authorities = new ArrayList<>();
+
+         // Menambahkan granted authorities sesuai kebutuhan
+         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    	MySecurityUser usrDetail = new MySecurityUser.Builder()
+				.withId(1)
+				.withEmail("salmandriva@gmail.com")
+				.withUsername("salmandriva@gmail.com")
+				.withFullname("Salman Farisi")
+				.withPassword("123456")
+				.withPhoto("foto.jpeg")
+				.withAuthorities(authorities)
+				.build();
+    	
     	mockMvc.perform(
     			MockMvcRequestBuilders.get("/")
-    			.with(user("farisi").password("1234567"))
+    			.with(user(usrDetail))
     			)
     	.andExpect(view().name("index"))
     	.andExpect(status().isOk());
