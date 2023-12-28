@@ -29,7 +29,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.shopme.admin.UserController;
 import com.shopme.admin.requests.UserRequest;
 import com.shopme.admin.user.EmailService;
 import com.shopme.admin.user.RoleService;

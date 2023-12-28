@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.shopme.admin.UserController;
 import com.shopme.admin.requests.UserRequest;
 import com.shopme.admin.user.RoleService;
 import com.shopme.admin.user.UserService;
