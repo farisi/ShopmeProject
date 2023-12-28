@@ -96,11 +96,11 @@
 	          </li>
 	          <li class="nav-item dropdown d-none d-lg-block user-dropdown dropstart">
 	            <a class="nav-link profile-image" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-	             	<img class="img-xs rounded-circle" th:src="@{'/images/avatars/'+${#authentication.principal.photo}}" alt="Profile image" loading="lazy"> 
+	             	<img class="img-xs rounded-circle" th:src="@{'/images/avatars/thumbnails/'+${#authentication.principal.photo}}" alt="Profile image" loading="lazy"> 
 	            </a>
 	            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
 	              <div class="dropdown-header text-center">
-	                <img class="img-md rounded-circle" th:src="@{'/images/avatars/'+${#authentication.principal.photo}}" alt="Profile image" loading='lazy'>
+	                <img class="img-md rounded-circle" th:src="@{'/images/avatars/thumbnails/'+${#authentication.principal.photo}}" alt="Profile image" loading='lazy'>
 	              </div>
 	              <p class="dropdown-item text-muted mb-0" sec:authentication="principal.authorities">allenmoreno@gmail.com</p>
 	              <a class="dropdown-item" th:href="@{/users/{id}(id=${#authentication.principal.id})}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2" ></i> My Profile <span class="badge badge-pill badge-danger" sec:authentication="principal.id">1</span></a>

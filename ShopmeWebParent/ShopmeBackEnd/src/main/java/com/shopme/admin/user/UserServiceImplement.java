@@ -61,6 +61,7 @@ public class UserServiceImplement implements UserService {
 			user = new User();
 			user.setPassword(passwordEncoder.encode(userReq.getPassword()));
 			isNew=true;
+			user.setPhotos("1.jpg");
 		}
 		user.setId(userReq.getId());
 		user.setEmail(userReq.getEmail());
