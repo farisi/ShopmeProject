@@ -1,4 +1,4 @@
-package com.shopme.admin;
+package com.shopme.admin.controllers;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

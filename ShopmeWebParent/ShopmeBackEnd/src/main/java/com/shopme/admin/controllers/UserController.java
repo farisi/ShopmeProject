@@ -1,4 +1,4 @@
-package com.shopme.admin;
+package com.shopme.admin.controllers;
 
 import java.util.List;
 
