@@ -11,7 +11,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.shopme.admin.services.FilesStorageService;
 import com.shopme.common.entities.Role;
 
 @DataJpaTest
@@ -23,6 +25,9 @@ public class RoleRepositoryTest {
 	
 	@Autowired
 	TestEntityManager entityManager;
+	
+	@MockBean
+	FilesStorageService fss;
 	
 	@Test
 	public void testCreateFirstRole() {

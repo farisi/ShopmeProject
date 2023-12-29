@@ -1,6 +1,7 @@
 package com.shopme.admin.utilities.securities;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -18,9 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.ui.Model;
@@ -31,7 +29,6 @@ import com.shopme.admin.services.PasswordResetService;
 import com.shopme.admin.user.EmailService;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.utilitas.UrlUtils;
-import com.shopme.admin.utilitas.securities.CustomUserDetail;
 import com.shopme.admin.utilitas.securities.MySecurityUser;
 import com.shopme.admin.utilitas.securities.WebSecurityConfig;
 
@@ -101,25 +98,25 @@ public class WebSecurityConfigTest {
         		)
                 .andExpect(status().isOk());
     }
-//
-//    @Test
-//    public void testAnyRequestRequiresAuthentication() throws Exception {
-//    	
-//        mockMvc.perform(MockMvcRequestBuilders.get("/"))
-//                .andExpect(status().is3xxRedirection());
-//    }
-//
-//    @Test
-//    public void testFormLoginLoginPage() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get("/login"))
-//                .andExpect(status().isOk())
-//                .andExpect(view().name("auths/login"));
-//    }
-//
-//    @Test
-//    public void testLogoutSuccessUrl() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get("/logout"))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl("/"));
-//    }
+
+    @Test
+    public void testAnyRequestRequiresAuthentication() throws Exception {
+    	
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void testFormLoginLoginPage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("auths/login"));
+    }
+
+    @Test
+    public void testLogoutSuccessUrl() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/logout"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+    }
 }

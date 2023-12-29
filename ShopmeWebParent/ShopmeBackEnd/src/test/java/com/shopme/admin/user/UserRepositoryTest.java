@@ -14,7 +14,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.shopme.admin.services.FilesStorageService;
 import com.shopme.admin.utilities.ExcelDataReader;
 import com.shopme.common.entities.Role;
 import com.shopme.common.entities.User;
@@ -30,6 +32,9 @@ public class UserRepositoryTest {
 	TestEntityManager entityManager;
 	
 	private static TestEntityManager staticEntityManager;
+	
+	@MockBean
+	FilesStorageService fss;
 	
 
 	@BeforeEach

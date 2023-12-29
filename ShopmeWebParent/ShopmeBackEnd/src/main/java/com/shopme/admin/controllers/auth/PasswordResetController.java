@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.exceptions.PageNotFoundException;
@@ -96,18 +97,20 @@ public class PasswordResetController {
 		System.out.println(" sebelum pengujian validasi!");
 		if(valid.hasErrors()) {
 			System.out.println(" error tapi sebelum print error terjadi ");
-			ui.addAttribute("user",new PasswordResetRequest());
-			//ui.addAttribute("user",prr);
+			//ui.addAttribute("user",new PasswordResetRequest());
+			ui.addAttribute("user",prr);
 			return "auths/form_reset_password";
 		}
 		Optional<User> getUser = usrSrv.findByEmail(prr.getEmail());
-		User changedUser = usrSrv.updateUserPassword(prr.getPassword(), getUser.get());
-		System.out.println("user setelah diganti password " + changedUser.getEmail());
-		Authentication authentication = new UsernamePasswordAuthenticationToken(changedUser.getEmail(), changedUser.getPassword());
-		System.out.println(authentication);
-        authProvider.authenticate(authentication);
-        System.out.println("akan redirect");
-		return "redirect:/";
+		if(getUser.isPresent()) {
+			User changedUser = usrSrv.updateUserPassword(prr.getPassword(), getUser.get());
+	        System.out.println("akan redirect");
+			return "redirect:/";
+		}
+		else {
+			redirect.addFlashAttribute("fails", "Email is not found!");
+			return "redirect:/auth/reset_password/"+token;
+		}
 	}
 	
 	private boolean isTokenValid(Optional<PasswordReset> pr, Duration expirationTime) {
