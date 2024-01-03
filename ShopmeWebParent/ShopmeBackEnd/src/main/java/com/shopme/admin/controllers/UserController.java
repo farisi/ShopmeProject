@@ -1,10 +1,15 @@
 package com.shopme.admin.controllers;
 
+import java.util.ArrayList;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,12 +46,53 @@ public class UserController {
 	EmailService emailService;
 	
 	@GetMapping("")
-	public String index(@RequestParam(defaultValue = "0") int pagenum, @RequestParam(defaultValue = "10") int pagesize, Model ui) {
-		PageRequest pageable = PageRequest.of(pagenum, pagesize);
-		Page<User> users = userSrv.all(pageable);
-		System.out.println(" number " + users.getNumber());
-		//List<User> users =pages.getContent();
-		ui.addAttribute("users",users);
+	public String index(
+			@RequestParam(required = false) String keyword,
+			@RequestParam(defaultValue = "1") int pagenum, 
+			@RequestParam(defaultValue = "10") int pagesize, 
+			@RequestParam(defaultValue = "firstName,asc") String[] sort,
+			Model ui) {
+		try {
+		      List<User> users = new ArrayList<User>();
+		      
+		      String sortField = sort[0];
+		      String sortDirection = sort[1];
+		      
+		      Direction direction;
+			if (sortDirection.equals("desc"))
+			{
+				direction = Sort.Direction.DESC;
+			}
+			else
+			{
+				direction = Sort.Direction.ASC;
+			}
+		    Order order = new Order(direction, sortField);
+		      
+		    Pageable pageable = PageRequest.of(pagenum - 1, pagesize, Sort.by(order));
+
+		      Page<User> pageUser;
+		      if (keyword == null) {
+		        pageUser = userSrv.all(pageable);
+		      } else {
+		    	pageUser = userSrv.findByFirstnameContainingIgnoreCase(keyword, pageable);
+		        ui.addAttribute("keyword", keyword);
+		      }
+
+		      users = pageUser.getContent();
+		      
+		      ui.addAttribute("users", users);
+		      ui.addAttribute("currentPage", pageUser.getNumber() + 1);
+		      ui.addAttribute("totalItems", pageUser.getTotalElements());
+		      ui.addAttribute("totalPages", pageUser.getTotalPages());
+		      ui.addAttribute("pageSize", pagesize);
+		      ui.addAttribute("sortField", sortField);
+		      ui.addAttribute("sortDirection", sortDirection);
+		      ui.addAttribute("reverseSortDirection", sortDirection.equals("asc") ? "desc" : "asc");
+		    } catch (Exception e) {
+		      ui.addAttribute("message", e.getMessage());
+		    }
+
 		return "users/index";
 	}
 	

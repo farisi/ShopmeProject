@@ -31,7 +31,13 @@
 								<div class="card-content py-5">
 									<table class="table table-striped">
 										<thead>
-											<th>No</th><th>Email</th><th>Firstname</th><th>Lastname</th><th>Role</th><th>Status</th><th>Action</th>
+											<th>No</th>
+											<th th:replace="fragments/sorting :: sorting('email','Email')">Email</th>
+											<th th:replace="fragments/sorting :: sorting('firstName','Firstname')">Firstname</th>
+											<th th:replace="fragments/sorting :: sorting('lastName','Lastname')">Lastname</th>
+											<th>Role</th>
+											<th>Status</th>
+											<th>Action</th>
 										</thead>
 										<tbody>
 											<tr th:each="u,index : ${users}">
@@ -61,11 +67,11 @@
 								</div>
 								<div class="tfoot py-3">
 									<nav aria-label="Page navigation">
-									  <ul class="pagination" th:if="${users.totalPages > 0 }" >
+									  <ul class="pagination" th:if="${totalPages > 0 }" >
 									  
 									    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-									    <th:block th:each="item :  ${#numbers.sequence( 1, users.totalPages/1)}">	
-									    	<li class="page-item" th:classappend="${item==users.number + 1} ? active" ><a class="page-link" th:href="@{/users(pagesize=${users.size}, pagenum=${item - 1})}" th:text=${item}>1</a></li>
+									    <th:block th:each="item :  ${#numbers.sequence( 1, totalPages/1)}">	
+									    	<li class="page-item" th:classappend="${item==currentPage} ? active" ><a class="page-link" th:href="@{/users(pagesize=${pageSize}, pagenum=${item})}" th:text=${item}>1</a></li>
 									    </th:block>
 									    
 									    <li class="page-item"><a class="page-link" href="#">Next</a></li>

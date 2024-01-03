@@ -24,4 +24,7 @@ public interface UserRepository extends PagingAndSortingRepository<User,Integer>
 	
 	@EntityGraph(attributePaths = "roles")
 	Page<User> findAll(Pageable pageable);
+	
+	@EntityGraph(attributePaths = "roles")
+	Page<User> findByFirstNameContainingAllIgnoreCase(String keyword, Pageable pageable);
 }

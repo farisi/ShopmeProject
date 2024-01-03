@@ -126,4 +126,10 @@ public class UserServiceImplement implements UserService {
 		return repo.findAll(p);
 	}
 
+	@Override
+	public Page<User> findByFirstnameContainingIgnoreCase(String keyword, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findByFirstNameContainingAllIgnoreCase(keyword, pageable);
+	}
+
 }
