@@ -87,12 +87,11 @@ public class PasswordResetController {
 	
 	@PatchMapping("/{token}/{email}")
 	public String update(
-			@Valid @ModelAttribute("user") PasswordResetRequest prr,
 			@PathVariable String email, 
 			@PathVariable UUID token,
+			@Valid @ModelAttribute("user") PasswordResetRequest prr,
 			BindingResult valid,
 			Model ui, 
-			HttpServletRequest req,
 			RedirectAttributes redirect) {
 		System.out.println(" sebelum pengujian validasi!");
 		if(valid.hasErrors()) {
@@ -101,6 +100,7 @@ public class PasswordResetController {
 			ui.addAttribute("user",prr);
 			return "auths/form_reset_password";
 		}
+		
 		Optional<User> getUser = usrSrv.findByEmail(prr.getEmail());
 		if(getUser.isPresent()) {
 			User changedUser = usrSrv.updateUserPassword(prr.getPassword(), getUser.get());
