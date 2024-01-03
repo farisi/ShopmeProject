@@ -15,6 +15,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.shopme.admin.services.FilesStorageService;
 import com.shopme.admin.utilities.ExcelDataReader;
@@ -157,6 +160,25 @@ public class UserRepositoryTest {
 		Integer userId=1;
 		repo.deleteById(userId);
 		assertThatNoException();
+	}
+	
+	@Test
+	public void testListFirstPage() {
+		for(int i=0; i < 10; i++)
+		{
+			User user1 = new User("nam_" + i +"_@codejava.net","p455w0rd","Nam","Ha Minh");
+			user1.addRole(new Role(3));
+			repo.save(user1);
+		}
+		
+		
+		int pageNumber =0;
+		int pageSize=4;
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<User> page = repo.findAll(pageable);
+		List<User> listUsers = page.getContent();
+		listUsers.forEach(user->System.out.println(user));
+		assertThat(listUsers.size()).isEqualTo(pageSize);
 	}
 	
 	@AfterEach
