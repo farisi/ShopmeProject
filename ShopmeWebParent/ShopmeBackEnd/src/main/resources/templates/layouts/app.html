@@ -102,6 +102,7 @@
 	              <div class="dropdown-header text-center">
 	                <img class="img-md rounded-circle" th:src="@{'/images/avatars/thumbnails/'+${#authentication.principal.photo}}" alt="Profile image" loading='lazy'>
 	              </div>
+	              <p class="dropdown-item text-muted mb-0" th:text="${#authentication.principal.fullname}"></p>
 	              <p class="dropdown-item text-muted mb-0" sec:authentication="principal.authorities">allenmoreno@gmail.com</p>
 	              <a class="dropdown-item" th:href="@{/users/{id}(id=${#authentication.principal.id})}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2" ></i> My Profile <span class="badge badge-pill badge-danger" sec:authentication="principal.id">1</span></a>
 	              <a class="dropdown-item" th:href="@{/logout}"  onclick="event.preventDefault();$('#logout').submit()"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
