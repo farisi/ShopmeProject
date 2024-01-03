@@ -12,7 +12,7 @@ th:replace="~{layouts/auth :: main-fragment(
          <form th:method="POST" th:action="@{/login}">
 			  <!-- Email input -->
 			  <div class="form-outline mb-4">
-			    <input type="email" id="username" class="form-control" name="username" />
+			    <input type="email" id="username" class="form-control" name="username" autofocus/>
 			    <label class="form-label" for="username">Email address</label>
 			  </div>
 
