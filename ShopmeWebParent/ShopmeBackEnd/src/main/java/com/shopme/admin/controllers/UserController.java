@@ -3,6 +3,8 @@ package com.shopme.admin.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.requests.UserRequest;
@@ -38,8 +41,11 @@ public class UserController {
 	EmailService emailService;
 	
 	@GetMapping("")
-	public String index(Model ui) {
-		List<User> users =userSrv.all();
+	public String index(@RequestParam(defaultValue = "0") int pagenum, @RequestParam(defaultValue = "10") int pagesize, Model ui) {
+		PageRequest pageable = PageRequest.of(pagenum, pagesize);
+		Page<User> users = userSrv.all(pageable);
+		System.out.println(" number " + users.getNumber());
+		//List<User> users =pages.getContent();
 		ui.addAttribute("users",users);
 		return "users/index";
 	}

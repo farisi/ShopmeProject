@@ -1,9 +1,13 @@
 package com.shopme.admin.user;
 
+
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,5 +118,12 @@ public class UserServiceImplement implements UserService {
 	public User save(User user) {
 		// TODO Auto-generated method stub
 		return repo.save(user);
-	}	
+	}
+
+	@Override
+	public Page<User> all(Pageable p) {
+		// TODO Auto-generated method stub
+		return repo.findAll(p);
+	}
+
 }

@@ -30,35 +30,48 @@
 								
 								<div class="card-content py-5">
 									<table class="table table-striped">
-									<thead>
-										<th>No</th><th>Email</th><th>Firstname</th><th>Lastname</th><th>Role</th><th>Status</th><th>Action</th>
-									</thead>
-									<tbody>
-										<tr th:each="u,index : ${users}">
-											<td th:text="${index.count}"></td>
-											<td th:text="${u.email}"></td>
-											<td th:text="${u.firstName}"></th>
-											<td th:text="${u.lastName}"></td>
-											<td>	
-												<th:block th:if="${not #lists.isEmpty(u.roles)}" th:text="${u.roles[0].displayName}"></th:block>	
-												<th:block th:if="${#lists.isEmpty(u.roles)}" >-</th:block>
-											</td>
-											<td th:class="${u.enabled ? 'bg-success' : 'bg-danger'} + ' text-white'">
-												<span th:text="${u.enabled ? 'Enable' : 'Disable'}" ></span>
-											</td>
-											<td>
-												<a th:href="@{users/{id}/edit(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-edit  fa-xs"></i></a>
-												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-info btn-sm"><i class="fas fa-info  fa-xs"></i></a>
-												<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-danger btn-sm btn-hapus" th:onclick="'event.preventDefault(); removeUser(this);'" th:data-id="${u.id}">
-												    <i class="fas fa-remove fa-xs"></i>
-												</a>
-												<form th:id="'user_'+${u.id}" th:action="@{/users/{userId}(userId=${u.id})}" th:method="delete" onsubmit="return confirmDelete()">
-												</form>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+										<thead>
+											<th>No</th><th>Email</th><th>Firstname</th><th>Lastname</th><th>Role</th><th>Status</th><th>Action</th>
+										</thead>
+										<tbody>
+											<tr th:each="u,index : ${users}">
+												<td th:text="${index.count}"></td>
+												<td th:text="${u.email}"></td>
+												<td th:text="${u.firstName}"></th>
+												<td th:text="${u.lastName}"></td>
+												<td>	
+													<th:block th:if="${not #lists.isEmpty(u.roles)}" th:text="${u.roles[0].displayName != null ? u.roles[0].displayName : u.roles[0].name}"></th:block>	
+													<th:block th:if="${#lists.isEmpty(u.roles)}" >-</th:block>
+												</td>
+												<td th:class="${u.enabled ? 'bg-success' : 'bg-danger'} + ' text-white'">
+													<span th:text="${u.enabled ? 'Enable' : 'Disable'}" ></span>
+												</td>
+												<td>
+													<a th:href="@{users/{id}/edit(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-edit  fa-xs"></i></a>
+													<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-info btn-sm"><i class="fas fa-info  fa-xs"></i></a>
+													<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-danger btn-sm btn-hapus" th:onclick="'event.preventDefault(); removeUser(this);'" th:data-id="${u.id}">
+													    <i class="fas fa-remove fa-xs"></i>
+													</a>
+													<form th:id="'user_'+${u.id}" th:action="@{/users/{userId}(userId=${u.id})}" th:method="delete" onsubmit="return confirmDelete()">
+													</form>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 								</div>
+								<div class="tfoot py-3">
+									<nav aria-label="Page navigation">
+									  <ul class="pagination" th:if="${users.totalPages > 0 }" >
+									  
+									    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+									    <th:block th:each="item :  ${#numbers.sequence( 1, users.totalPages/1)}">	
+									    	<li class="page-item" th:classappend="${item==users.number + 1} ? active" ><a class="page-link" th:href="@{/users(pagesize=${users.size}, pagenum=${item - 1})}" th:text=${item}>1</a></li>
+									    </th:block>
+									    
+									    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+									  </ul>
+									</nav>	
+								</div>	
 							</div>
 						</div>
 					</div>
