@@ -2,13 +2,10 @@ package com.shopme.admin.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -19,7 +16,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,9 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 
-import com.shopme.admin.controllers.auth.PasswordResetController;
 import com.shopme.admin.requests.PasswordResetRequest;
 import com.shopme.admin.services.PasswordResetService;
 import com.shopme.admin.user.UserService;
@@ -111,20 +105,18 @@ public class PasswordResetControllerTest {
         // Simulasi validasi gagal
         //when(usrSrv.findByEmail(any())).thenReturn(Optional.empty());
 
-        mockMvc.perform(patch("/auth/reset_password/3a5a091c-b48c-41e5-812c-819898a16b1f/admin@gmail.com")
-                .param("password", "password")
-                .param("confirmPassword", "password")
-                .param("email", ""))
-        	
-            .andExpect(status().is3xxRedirection()) // Anda bisa mengubah ini sesuai kebutuhan
-            //.andExpect(model().attributeExists("user"))
-            .andExpect(redirectedUrl("/auth/reset_password/3a5a091c-b48c-41e5-812c-819898a16b1f"))
-//        .andExpect(status().isBadRequest()) // Expecting a 400 Bad Request status
-//        .andExpect(view().name("auths/form_reset_password")) // Expecting the view name
-//        .andExpect(model().hasErrors())
-            .andDo(print());
+		PasswordResetRequest invalidUser = new PasswordResetRequest();
+	    invalidUser.setPassword("pass");
+	    invalidUser.setConfirmPassword("pass2");
+	    invalidUser.setEmail("invalidemail");
 
-        //verifyZeroInteractions(usrSrv, prSrv);
+	    mockMvc.perform(patch("/auth/reset_password/3a5a091c-b48c-41e5-812c-819898a16b1f/admin@gmail.com")
+	            .param("password", invalidUser.getPassword())
+	            .param("confirmPassword", invalidUser.getConfirmPassword())
+	            .param("email", invalidUser.getEmail()))
+	            .andExpect(status().isOk())
+	            .andExpect(model().size(1))  // Expecting a success status because it stays on the same page
+	            .andExpect(view().name("auths/form_reset_password")) ; // Expecting the same view
     }
 
     @Test
@@ -141,10 +133,6 @@ public class PasswordResetControllerTest {
                 .param("email", "email@example.com"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/")); // Anda bisa mengubah ini sesuai kebutuhan
-            
-
-//        verify(usrSrv).updateUserPassword(eq("password"), any());
-        //verifyNoMoreInteractions(usrSrv, passwordResetService);
     }
 
     @Test
@@ -152,14 +140,12 @@ public class PasswordResetControllerTest {
         // Simulasi user tidak ditemukan
         when(usrSrv.findByEmail(any())).thenReturn(Optional.empty());
 
-        mockMvc.perform(patch("/auth/reset_password/token/email")
+        mockMvc.perform(patch("/auth/reset_password/3a5a091c-b48c-41e5-812c-819898a16b1f/admin@gmail.com")
                 .param("password", "password")
                 .param("confirmPassword", "password")
                 .param("email", "email@example.com"))
             .andExpect(status().is3xxRedirection()) // Anda bisa mengubah ini sesuai kebutuhan
             .andExpect(flash().attribute("fails", "Email is not found!"))
-            .andExpect(view().name("redirect:/auth/reset_password/token"));
-
-        //verifyZeroInteractions(passwordResetService);
+            .andExpect(view().name("redirect:/auth/reset_password/3a5a091c-b48c-41e5-812c-819898a16b1f"));
     }
 }
