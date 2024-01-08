@@ -42,7 +42,7 @@
 										<label for="roles" class="label-control">Role</label>
 										<select th:field="*{roles}" class="form-control">
 											<option value="">Please select role</option>
-											<option th:each="item : ${roles}" th:text="${item.displayName}" th:value="${item.id}"></option>
+											<option th:each="item : ${roles}" th:text="${item.displayName==null ?  item.name :  item.displayName }" th:value="${item.id}"></option>
 										</select>
 										<span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="text-danger">email can not empty</span>
 									</div>
