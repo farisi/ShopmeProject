@@ -3,8 +3,35 @@
 	<head>
 		<meta charset="ISO-8859-1">
 		<title>Welcome to Shopme</title>
+		
 	</head>
 	<body>
-		<h1>Welcome to Shopme  e-Commerce</h1>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script src="https://unpkg.com/primevue/core/core.js"></script>
+		<script src="https://unpkg.com/primevue/config/confi ... "></script>
+		<script src="https://unpkg.com/primevue/utils/utils.min.js"></script>
+		<script src="https://unpkg.com/primevue@3.29.1/rippl ... "></script>
+		<script src="https://unpkg.com/primevue@3.29.1/input ... "></script>
+		<script src="https://unpkg.com/primevue@3.29.1/butto ... "></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ ... "></script>
+
+		<div id="app">
+			<h1>{{text}}</h1>
+		</div>
+		
+		<script>
+		  const { createApp, ref } = Vue
+		
+		  const App = {
+			  setup(){
+				  const text = "PrimveVue";
+				  
+				  return {
+					  text
+				  }
+			  }
+		  };
+		  createApp(App).mount('#app');
+		</script>
 	</body>
 </html>
