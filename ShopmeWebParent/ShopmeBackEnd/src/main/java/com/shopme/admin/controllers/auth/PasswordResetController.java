@@ -64,23 +64,38 @@ public class PasswordResetController {
 			ui.addAttribute("pr",pr);
 			return "auths/reset_password";
 		}
-		prSrv.save(pr);
-		redirect.addFlashAttribute("success", "Email confirmation sent successful!");
+		if(usrSrv.findByEmail(pr.getEmail()).isPresent()) {
+			prSrv.save(pr);
+			redirect.addFlashAttribute("success", "Email confirmation sent successful!");
+		}
+		else {
+			throw new PageNotFoundException("Your email could not found");
+		}
 		return "redirect:/auth/reset_password";
 	}
 	
 	@GetMapping("/{token}")
 	public String edit(@PathVariable UUID token,Model ui) {
 		Optional<PasswordReset> pr = prSrv.findByToken(token);
-		if(isTokenValid(pr,Duration.ofHours(1))) {
-			Optional<User> user = usrSrv.findByEmail(pr.get().getEmail());
-			PasswordResetRequest prr = new PasswordResetRequest();
-			prr.setEmail(user.get().getEmail());
-			prr.setToken(token);
-			ui.addAttribute("user",prr);
+		if(pr.isPresent()) {
+			if(prSrv.isTokenValid(pr.get(),Duration.ofHours(1))) {
+				Optional<User> user = usrSrv.findByEmail(pr.get().getEmail());
+				if(user.isPresent()) {
+					PasswordResetRequest prr = new PasswordResetRequest();
+					prr.setEmail(user.get().getEmail());
+					prr.setToken(token);
+					ui.addAttribute("user",prr);
+				}
+				else {
+					throw new PageNotFoundException("Invalid Email");
+				}
+			}
+			else {
+				throw new PageNotFoundException("Invalid or expired token");
+			}
 		}
 		else {
-			//throw new PageNotFoundException("Invalid or expired token");
+			throw new PageNotFoundException("Invalid Token");
 		}
 		return "auths/form_reset_password";
 	}
@@ -93,10 +108,7 @@ public class PasswordResetController {
 			BindingResult valid,
 			Model ui, 
 			RedirectAttributes redirect) {
-		System.out.println(" sebelum pengujian validasi!");
 		if(valid.hasErrors()) {
-			System.out.println(" error tapi sebelum print error terjadi ");
-			//ui.addAttribute("user",new PasswordResetRequest());
 			ui.addAttribute("user",prr);
 			return "auths/form_reset_password";
 		}
@@ -104,21 +116,10 @@ public class PasswordResetController {
 		Optional<User> getUser = usrSrv.findByEmail(prr.getEmail());
 		if(getUser.isPresent()) {
 			User changedUser = usrSrv.updateUserPassword(prr.getPassword(), getUser.get());
-	        System.out.println("akan redirect");
 			return "redirect:/";
 		}
 		else {
-			redirect.addFlashAttribute("fails", "Email is not found!");
-			return "redirect:/auth/reset_password/"+token;
+			throw new PageNotFoundException("Your email could not be found");
 		}
-	}
-	
-	private boolean isTokenValid(Optional<PasswordReset> pr, Duration expirationTime) {
-		if(pr.isPresent()) {
-			LocalDateTime createdAt = pr.get().getCreated_at();
-            LocalDateTime expiration = createdAt.plus(expirationTime);
-            return LocalDateTime.now().isBefore(expiration);
-		}
-		return false;
 	}
 }

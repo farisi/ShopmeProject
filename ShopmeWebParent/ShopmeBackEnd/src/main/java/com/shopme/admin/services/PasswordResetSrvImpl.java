@@ -1,5 +1,7 @@
 package com.shopme.admin.services;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,6 +52,14 @@ public class PasswordResetSrvImpl implements PasswordResetService {
 	public Optional<PasswordReset> findByToken(UUID token) {
 		// TODO Auto-generated method stub
 		return prRepo.findByToken(token);
+	}
+
+	@Override
+	public boolean isTokenValid(PasswordReset pr, Duration expirationTime) {
+		// TODO Auto-generated method stub
+		LocalDateTime createdAt = pr.getCreated_at();
+        LocalDateTime expiration = createdAt.plus(expirationTime);
+        return LocalDateTime.now().isBefore(expiration);
 	}
 
 }
