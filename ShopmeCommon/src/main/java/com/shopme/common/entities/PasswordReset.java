@@ -36,6 +36,10 @@ public class PasswordReset {
 	public UUID getToken() {
 		return token;
 	}
+	
+	public void setToken(UUID token) {
+		this.token = token;
+	}
 
 	public String getEmail() {
 		return email;
