@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +29,7 @@ public class UserServiceImplement implements UserService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
+	
 	@Override
 	public List<User> all() {
 		// TODO Auto-generated method stub
@@ -114,12 +117,14 @@ public class UserServiceImplement implements UserService {
 		return repo.save(user);
 	}
 
+	@CacheEvict(cacheNames = "users", key = "#user.id")
 	@Override
 	public User save(User user) {
 		// TODO Auto-generated method stub
 		return repo.save(user);
 	}
-
+	
+	@Cacheable(cacheNames = "users")
 	@Override
 	public Page<User> all(Pageable p) {
 		// TODO Auto-generated method stub
@@ -127,9 +132,9 @@ public class UserServiceImplement implements UserService {
 	}
 
 	@Override
-	public Page<User> findByFirstnameContainingIgnoreCase(String keyword, Pageable pageable) {
+	public Page<User> findByKeywordLike(String keyword, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findByFirstNameContainingAllIgnoreCase(keyword, pageable);
+		return repo.findByKeywordContainingAllIgnoreCase(keyword, pageable);
 	}
 
 }

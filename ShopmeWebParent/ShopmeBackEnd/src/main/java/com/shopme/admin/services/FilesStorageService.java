@@ -10,11 +10,11 @@ import org.springframework.core.io.Resource;
 public interface FilesStorageService {
 		public void init();
 
-	  public void save(MultipartFile file,String name);
+	  public void save(MultipartFile file,String path,String name);
 
-	  public Resource load(String filename);
+	  public Resource load(String filename,String path);
 	  
-	  public void deleteAll();
+	  public void deleteAll(String path);
 
-	  public Stream<Path> loadAll();
+	  public Stream<Path> loadAll(String rootpath);
 }

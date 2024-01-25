@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/app :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #home-static-resources},
+                                                 ~{:: #user-script-resouce},
+                                                ~{:: #home-header},
+                                                ~{:: #home-nav},
+                                                ~{:: #user-main-content},  
+                                                ~{:: #home-footer}
+                                               )}"
+>
+	<head>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+		<title>Categories :: Shopme Admin</title>
+		<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+		<link th:href="@{/fontawesome/all.css}" rel="stylesheet" type="text/css" />
+	</head>
+	<body >
+		<main class="py-4" id="user-main-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12" th:if="${success}">
+						<div class="alert alert-success">
+							<p >[[${success}]]</p>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="card-title">
+									<h4>Categories List</h4>
+								</div>
+								
+								<div class="card-content py-5">
+									<table class="table table-striped">
+										<thead>
+											<th>No</th>
+											<th>Image</th>
+											<th>Name</th>
+											<th>Alias</th>
+											<th>Description</th>
+											<th>Status</th>
+											<th>Action</th>
+										</thead>
+										<tbody>
+											<tr th:each="cat,i : ${categories}">
+												<td th:text="${i.count}"></td>
+												<td>
+													<img th:src="@{'images/categories/thumbnails/' + ${cat.image}}" width="25" height="25">
+												</td>
+												<td th:text="${cat.name}"></td>
+												<td th:text="${cat.alias}"></td>
+												<td th:text="${cat.description}"></td>
+												<td>
+													<th:block th:if="${cat.enabled}">
+														<a th:onclick="'event.preventDefault();$(\'#cat_disable_' + ${cat.id} + '\').submit();'">
+														    <i class="fa fa-check fa-lg text-success"></i>
+														</a>
+														<form 
+															th:id="'cat_disable_'+${cat.id}"
+															th:action="@{categories/{id}/disable(id=${cat.id})}" 
+															onsubmit="return confirm('are you sure to disable this category')" th:method="PATCH"></form> 
+													</th:block>
+													
+													<th:block th:if="${!cat.enabled}">
+														<a th:onclick="'event.preventDefault();$(\'#cat_enable_' + ${cat.id} + '\').submit();'">
+															<i class="fa fa-close fa-lg text-danger" ></i>
+														</a>
+														<form th:id="'cat_enable_'+${cat.id}"
+															th:action="@{categories/{id}/enable(id=${cat.id})}" 
+														 onsubmit="return confirm('are you sure to enable this category')" th:method="PATCH"></form>
+													</th:block>
+													
+												</td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="tfoot py-3">
+									<nav aria-label="Page navigation">
+									  
+									</nav>	
+								</div>	
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</main>		
+		<th:block id="user-script-resouce">
+			<script>
+				$(document).ready(function(){
+					if($('.alert').length > 0){
+						setInterval(function(){
+							$('.alert').remove();
+						},3000)
+					}
+				})
+			</script>
+		</th:block>
+	</body>
+</html>

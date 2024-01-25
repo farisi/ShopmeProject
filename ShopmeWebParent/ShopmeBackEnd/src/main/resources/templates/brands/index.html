@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/app :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #home-static-resources},
+                                                 ~{:: #user-script-resouce},
+                                                ~{:: #home-header},
+                                                ~{:: #home-nav},
+                                                ~{:: #user-main-content},  
+                                                ~{:: #home-footer}
+                                               )}"
+>
+	<head>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+		<title>Brands :: Shopme Admin</title>
+		<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+		<link th:href="@{/fontawesome/all.css}" rel="stylesheet" type="text/css" />
+	</head>
+	<body >
+		<main class="py-4" id="user-main-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="card-title">
+									<h4>Brands List</h4>
+								</div>
+								
+								<div class="card-content py-5">
+									<table class="table table-striped">
+										<thead>
+											<th>No</th>
+											<th>Name</th>
+											<th>Action</th>
+										</thead>
+										<tbody>
+											
+										</tbody>
+									</table>
+								</div>
+								<div class="tfoot py-3">
+									<nav aria-label="Page navigation">
+									  
+									</nav>	
+								</div>	
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</main>		
+		<th:block id="user-script-resouce">
+
+		</th:block>
+	</body>
+</html>

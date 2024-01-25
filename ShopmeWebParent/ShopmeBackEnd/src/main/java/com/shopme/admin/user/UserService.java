@@ -22,5 +22,5 @@ public interface UserService {
 	public User findUserById(Integer id);
 	public Optional<User> findByEmail(String email);
 	public User updateUserPassword(String password, User user);
-	Page<User> findByFirstnameContainingIgnoreCase(String keyword, Pageable pageable);
+	Page<User> findByKeywordLike(String keyword, Pageable pageable);
 }

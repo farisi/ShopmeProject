@@ -1,37 +1,45 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="ISO-8859-1">
-		<title>Welcome to Shopme</title>
-		
-	</head>
-	<body>
-		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-		<script src="https://unpkg.com/primevue/core/core.js"></script>
-		<script src="https://unpkg.com/primevue/config/confi ... "></script>
-		<script src="https://unpkg.com/primevue/utils/utils.min.js"></script>
-		<script src="https://unpkg.com/primevue@3.29.1/rippl ... "></script>
-		<script src="https://unpkg.com/primevue@3.29.1/input ... "></script>
-		<script src="https://unpkg.com/primevue@3.29.1/butto ... "></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ ... "></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Shopme</title>
+    
+        <script src="https://cdn.jsdelivr.net/npm/vue@3.2.26/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@4.0.15/dist/vue-router.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@2.9.1/dist/primevue.min.js"></script>
 
-		<div id="app">
-			<h1>{{text}}</h1>
-		</div>
-		
-		<script>
-		  const { createApp, ref } = Vue
-		
-		  const App = {
-			  setup(){
-				  const text = "PrimveVue";
-				  
-				  return {
-					  text
-				  }
-			  }
-		  };
-		  createApp(App).mount('#app');
-		</script>
-	</body>
+</head>
+<body>
+    <div id="app"></div>
+
+
+    <script>
+
+
+        Vue.use(Router);
+        PrimeVue.install(Vue);
+
+        const routes = [
+            {
+                path: "/",
+                name: "Home",
+                component: () => import("./components/Home.vue")
+            },
+            {
+                path: "/about",
+                name: "About",
+                component: () => import("./components/About.vue")
+            }
+        ];
+
+        const router = new Router({
+            routes
+        });
+
+        const app = new Vue({
+            el: "#app",
+            router
+        });
+    </script>
+</body>
 </html>

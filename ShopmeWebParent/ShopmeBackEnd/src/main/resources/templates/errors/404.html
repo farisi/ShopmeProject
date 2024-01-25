@@ -1,0 +1,17 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/auth :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #error-main-content}
+                                               )}" >
+<head>
+<title>Form Reset Password</title>
+</head>
+<body>
+	<div class="container" id="error-main-content">
+		<div class="alert alert-danger">
+			<h2>Page is not found</h2>
+	    	<p th:text="${errorMessage}"></p>
+	    	<a th:href="@{/login}" class="btn btn-success">Back</a>
+		</div>
+    </div>
+</body>
+</html>

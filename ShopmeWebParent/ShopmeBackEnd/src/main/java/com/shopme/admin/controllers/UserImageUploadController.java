@@ -49,7 +49,7 @@ public class UserImageUploadController {
 			String extensi = file.getOriginalFilename().substring(index + 1);
 			User user = usrSrv.findUserById(id);
 			String namafile ="fotos_"+user.getId().toString()+"."+extensi;			
-			storageService.save(file,namafile);
+			storageService.save(file,"avatars",namafile);
 			user.setPhotos(namafile);
 			usrSrv.save(user);
             redirectAttributes.addFlashAttribute("message",

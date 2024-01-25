@@ -5,6 +5,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.annotation.EnableCaching;
 
 import com.shopme.admin.services.FilesStorageService;
 
@@ -12,10 +13,11 @@ import jakarta.annotation.Resource;
 
 @SpringBootApplication
 @EntityScan({"com.shopme.common.entities","com.shopme.admin.user"})
+@EnableCaching
 public class ShopmeBackEndApplication implements CommandLineRunner{
 	
-	@Resource
-	FilesStorageService storageService;
+//	@Resource
+//	FilesStorageService storageService;
 
 	public static void main(String[] args) {
 		//SpringApplication.run(ShopmeBackEndApplication.class, args);
@@ -27,6 +29,6 @@ public class ShopmeBackEndApplication implements CommandLineRunner{
 	@Override
 	  public void run(String... arg) throws Exception {
 //	    storageService.deleteAll();
-	    storageService.init();
+	    //storageService.init();
 	  }
 }

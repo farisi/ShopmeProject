@@ -26,5 +26,6 @@ public interface UserRepository extends PagingAndSortingRepository<User,Integer>
 	Page<User> findAll(Pageable pageable);
 	
 	@EntityGraph(attributePaths = "roles")
-	Page<User> findByFirstNameContainingAllIgnoreCase(String keyword, Pageable pageable);
+	@Query("SELECT u from User u left join fetch u.roles where email like concat(:keyword, '%') or firstName like concat(:keyword, '%') or lastName like concat(:keyword, '%')")
+	Page<User> findByKeywordContainingAllIgnoreCase(@Param("keyword") String keyword, Pageable pageable);
 }

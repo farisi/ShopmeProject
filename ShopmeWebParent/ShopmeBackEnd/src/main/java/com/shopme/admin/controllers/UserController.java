@@ -1,4 +1,4 @@
-package com.shopme.admin.controllers;
+ package com.shopme.admin.controllers;
 
 import java.util.ArrayList;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,6 +51,7 @@ public class UserController {
 			@RequestParam(defaultValue = "10") int pagesize, 
 			@RequestParam(defaultValue = "firstName,asc") String[] sort,
 			Model ui) {
+		
 		try {
 		      List<User> users = new ArrayList<User>();
 		      
@@ -75,7 +75,7 @@ public class UserController {
 		      if (keyword == null) {
 		        pageUser = userSrv.all(pageable);
 		      } else {
-		    	pageUser = userSrv.findByFirstnameContainingIgnoreCase(keyword, pageable);
+		    	pageUser = userSrv.findByKeywordLike(keyword, pageable);
 		        ui.addAttribute("keyword", keyword);
 		      }
 

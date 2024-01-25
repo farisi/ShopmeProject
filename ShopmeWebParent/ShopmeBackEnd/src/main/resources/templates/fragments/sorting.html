@@ -2,7 +2,7 @@
   <a th:href="@{'/users?' + ${keyword!=null && keyword!=''? 'keyword=' + keyword + '&' : ''}
                 + 'pagenum=' + ${currentPage} + '&pagesize=' + ${pageSize}
                 + ${sortField!=null ? '&sort=' + field + ',' + (sortField == field ? reverseSortDirection : sortDirection) : ''}}">
-    [[${label}]] </a>
+    [[${label}]]</a>
   <span th:if="${sortField == field}"
     th:class="${sortDirection == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-down-wide-short'}"></span>
 </th>

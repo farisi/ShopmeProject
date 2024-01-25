@@ -21,6 +21,11 @@
 		<main class="py-4" id="user-main-content">
 			<div class="container-fluid">
 				<div class="row">
+					<div class="col-lg-12" th:if="${success}">
+						<div class="alert alert-success">
+							<p>[[${success]]</p>
+						</div>
+					</div>
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-body">
@@ -32,9 +37,9 @@
 									<table class="table table-striped">
 										<thead>
 											<th>No</th>
-											<th th:replace="fragments/sorting :: sorting('email','Email')">Email</th>
-											<th th:replace="fragments/sorting :: sorting('firstName','Firstname')">Firstname</th>
-											<th th:replace="fragments/sorting :: sorting('lastName','Lastname')">Lastname</th>
+											<th th:replace="~{fragments/sorting :: sorting('email','Email')}">Email</th>
+											<th th:replace="~{fragments/sorting :: sorting('firstName','Firstname')}">Firstname</th>
+											<th th:replace="~{fragments/sorting :: sorting('lastName','Lastname')}">Lastname</th>
 											<th>Role</th>
 											<th>Status</th>
 											<th>Action</th>
