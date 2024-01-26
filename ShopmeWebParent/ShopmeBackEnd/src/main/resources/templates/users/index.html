@@ -54,14 +54,14 @@
 													<th:block th:if="${not #lists.isEmpty(u.roles)}" th:text="${u.roles[0].displayName != null ? u.roles[0].displayName : u.roles[0].name}"></th:block>	
 													<th:block th:if="${#lists.isEmpty(u.roles)}" >-</th:block>
 												</td>
-												<td th:class="${u.enabled ? 'bg-success' : 'bg-danger'} + ' text-white'">
-													<span th:text="${u.enabled ? 'Enable' : 'Disable'}" ></span>
+												<td >
+													<span  th:class="'text-white p-1 rounded-pill ' + ${u.enabled ? 'bg-success ' : 'bg-danger '} + ${u.enabled ? 'fa fa-check' : 'fa fa-close'}"></span>
 												</td>
 												<td>
-													<a th:href="@{users/{id}/edit(id=${u.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-edit  fa-xs"></i></a>
-													<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-info btn-sm"><i class="fas fa-info  fa-xs"></i></a>
-													<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-danger btn-sm btn-hapus" th:onclick="'event.preventDefault(); removeUser(this);'" th:data-id="${u.id}">
-													    <i class="fas fa-remove fa-xs"></i>
+													<a th:href="@{users/{id}/edit(id=${u.id})}" class="btn btn-sm"><i class="fas fa-file-edit  fa-lg text-warning"></i></a>
+													<a th:href="@{users/{id}(id=${u.id})}" class="btn  btn-sm"><i class="fas fa-info text-info  fa-lg"></i></a>
+													<a th:href="@{users/{id}(id=${u.id})}" class="btn btn-sm btn-hapus" th:onclick="'event.preventDefault(); removeUser(this);'" th:data-id="${u.id}">
+													    <i class="fas fa-remove text-danger fa-lg"></i>
 													</a>
 													<form th:id="'user_'+${u.id}" th:action="@{/users/{userId}(userId=${u.id})}" th:method="delete" onsubmit="return confirmDelete()">
 													</form>

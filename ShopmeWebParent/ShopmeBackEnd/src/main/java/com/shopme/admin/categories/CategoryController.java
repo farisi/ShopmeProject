@@ -11,9 +11,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -110,6 +112,67 @@ public class CategoryController {
 			categorySrv.save(cat);
 			redirect.addFlashAttribute("success", "Success to Disabled " + cat.getName());
 		}
+		return "redirect:/categories";
+	}
+	
+	@GetMapping("/{id}/edit")
+	public String edit(@PathVariable("id") int id, Model ui) {
+		Optional<Category> optcat = categorySrv.findOne(id);
+		ui.addAttribute("categories",categorySrv.categories());
+		ui.addAttribute("category", optcat.get());
+		return "categories/edit";
+	}
+	
+	@PatchMapping("/{id}/edit")
+	public String update(@PathVariable("id") int id, @RequestParam("profile_foto") MultipartFile profile_foto, 
+			@Valid @ModelAttribute Category category, 
+			BindingResult valid, Model ui, RedirectAttributes redirect  ) {
+		String namafile="image-thumbnail.png";
+		if(!profile_foto.isEmpty()) {
+			String filename =StringUtils.cleanPath(profile_foto.getOriginalFilename());
+			log.info("filename adalah " + filename);
+			int index = profile_foto.getOriginalFilename().lastIndexOf(".");
+			String extensi = profile_foto.getOriginalFilename().substring(index + 1);
+			LocalDateTime time = LocalDateTime.now(ZoneId.systemDefault())
+		            .truncatedTo(ChronoUnit.SECONDS);
+			namafile = time.format(FORMATTER)+"."+extensi;
+			storageService.save(profile_foto, "categories", namafile);
+		}
+		
+		if(valid.hasErrors()) {
+			log.info(" validasi tidak lewat");
+			valid.getAllErrors().stream().forEach(e->log.info(" error {e}" + e.toString()));
+			ui.addAttribute("categories",categorySrv.categories());
+			ui.addAttribute("category",category);
+			return "categories/create";
+		}
+		
+		log.info(" sebelum proses print terjadi ");
+		category.setImage(namafile);
+		categorySrv.save(category);
+		redirect.addFlashAttribute("success", "Category has added!");
+		return "redirect:/categories";
+	}
+	
+	@Transactional
+	@DeleteMapping("/{id}")
+	public String destroy(@PathVariable("id") int id, RedirectAttributes redirect) {
+		Optional<Category> optcat = categorySrv.findOne(id);
+		if(optcat.isPresent()) {
+			
+			if(optcat.get().getChildren().size() > 0) {
+				redirect.addFlashAttribute("fails","This catetogry have children and you have to remove them first!");
+			}
+			else {
+				categorySrv.delete(optcat.get());
+				storageService.deleteFile(optcat.get().getImage(), "categories");
+				redirect.addFlashAttribute("success","Remove category successfully!");
+			}
+		}
+		else {
+			redirect.addFlashAttribute("fails","Could not found the category!");
+		}
+		
 		return "redirect:/categories";
 	}
 }

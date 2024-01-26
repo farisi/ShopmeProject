@@ -44,7 +44,7 @@ public class ConcreateCategoryService implements CategoryService {
 			Set<Category> children = rootCategory.getChildren();
 			for(Category subCategory : children) {
 				String name="--" + subCategory.getName();
-				hierarchicalCategories.add(Category.copyFull(rootCategory,name));
+				hierarchicalCategories.add(Category.copyFull(subCategory,name));
 				listSubHierarchicalCategories(hierarchicalCategories, subCategory, 1);
 			}
 		}

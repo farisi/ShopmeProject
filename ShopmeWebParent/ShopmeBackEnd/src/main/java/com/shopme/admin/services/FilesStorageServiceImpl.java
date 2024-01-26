@@ -103,4 +103,18 @@ public class FilesStorageServiceImpl implements FilesStorageService{
 		    }
 	}
 
+	@Override
+	public void deleteFile(String filename, String path) {
+		// TODO Auto-generated method stub
+		Path rootpath = Paths.get("src/main/resources/" + uploadPath + "/" + path + "/");
+		Path tumbnailpath = Paths.get("src/main/resources/" + uploadPath + "/" + path + "/thumbnails/");
+		try {
+			Files.deleteIfExists(rootpath.resolve(filename));
+			Files.deleteIfExists(tumbnailpath.resolve(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

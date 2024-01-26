@@ -26,6 +26,12 @@
 							<p >[[${success}]]</p>
 						</div>
 					</div>
+					
+					<div class="col-lg-12" th:if="${fails}">
+						<div class="alert alert-warning">
+							<p >[[${fails}]]</p>
+						</div>
+					</div>
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-body">
@@ -74,7 +80,15 @@
 													</th:block>
 													
 												</td>
-												<td></td>
+												<td>
+													<a th:href="@{categories/{id}/edit(id=${cat.id})}" class="btn btn-sm"><i class="fas fa-file-edit  fa-lg text-warning"></i></a>
+													<a class="btn  btn-sm"><i class="fas fa-info text-info  fa-lg"></i></a>
+													<a th:href="@{categories/{id}(id=${cat.id})}" class="btn btn-sm btn-hapus" th:onclick="'event.preventDefault(); removeUser(this);'" th:data-id="${cat.id}">
+													    <i class="fas fa-remove text-danger fa-lg"></i>
+													</a>
+													<form th:id="'user_'+${cat.id}" th:action="@{/categories/{id}(id=${cat.id})}" th:method="delete" onsubmit="return confirmDelete()">
+													</form>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -91,14 +105,16 @@
 			</div>
 		</main>		
 		<th:block id="user-script-resouce">
-			<script>
-				$(document).ready(function(){
-					if($('.alert').length > 0){
-						setInterval(function(){
-							$('.alert').remove();
-						},3000)
-					}
-				})
+			<script th:inline="javascript">
+				function removeUser(e){
+					userid = e.getAttribute('data-id');
+					//document.getElementById("user_"+userid).submit();
+					$('#user_'+userid).submit();
+				
+				}
+			    function confirmDelete() {
+					return confirm('Are you sure want to delete this data?');
+			    }
 			</script>
 		</th:block>
 	</body>

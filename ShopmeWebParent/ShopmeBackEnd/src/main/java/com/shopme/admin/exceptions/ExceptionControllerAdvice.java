@@ -12,4 +12,9 @@ public class ExceptionControllerAdvice {
         model.addAttribute("errorMessage", ex.getMessage());
         return "index"; // Ganti dengan nama tampilan yang sesuai
     }
+	
+	@ExceptionHandler(CannotRemoveParentException.class)
+	public String handleCannotRemoveParentException(CannotRemoveParentException ex, Model model) {
+		return "errors/error-page";
+	}
 }
